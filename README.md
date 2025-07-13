@@ -2,7 +2,7 @@
 
 [![Chrome Web Store](https://img.shields.io/badge/Chrome%20Web%20Store-v1.0.0-blue?logo=google-chrome)](https://chrome.google.com/webstore/detail/anomalia)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Version](https://img.shields.io/badge/version-1.0.0-green.svg)](https://github.com/tu-usuario/anomalia/releases)
+[![Version](https://img.shields.io/badge/version-1.0.0-green.svg)](https://github.com/raquelquerol/anomalia/releases)
 [![Chrome Version](https://img.shields.io/badge/Chrome-88+-green?logo=google-chrome)](https://www.google.com/chrome/)
 
 Una extensión de Chrome que protege tu seguridad en Gmail y Outlook detectando enlaces potencialmente maliciosos en tiempo real.
@@ -74,9 +74,9 @@ Para reportar vulnerabilidades de seguridad, consulta nuestra [Política de Segu
 
 ## 📞 Soporte
 
-- **Issues**: [GitHub Issues](https://github.com/tu-usuario/anomalia/issues)
-- **Discusiones**: [GitHub Discussions](https://github.com/tu-usuario/anomalia/discussions)
-- **Documentación**: [Wiki](https://github.com/tu-usuario/anomalia/wiki)
+- **Issues**: [GitHub Issues](https://github.com/raquelquerol/anomalia/issues)
+- **Discusiones**: [GitHub Discussions](https://github.com/raquelquerol/anomalia/discussions)
+- **Documentación**: [Wiki](https://github.com/raquelquerol/anomalia/wiki)
 
 ## 📋 Changelog
 

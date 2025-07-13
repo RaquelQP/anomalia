@@ -64,7 +64,7 @@ Para desarrolladores:
 ### Contacto
 
 Para reportar vulnerabilidades de seguridad:
-- Email: [tu-email@ejemplo.com]
+- Email: [r.querol.p@gmail.com]
 - Asunto: `[SECURITY] Anomalia - Vulnerabilidad`
 
 Para preguntas generales sobre seguridad:
