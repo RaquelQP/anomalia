@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <title>Detección de enlaces camuflados</title>
+  <link rel="stylesheet" href="styles/popup.css" />
+</head>
+<body>
+  <div class="header-controls">
+    <div class="checkbox-container">
+      <input type="checkbox" id="toggle-darkmode" />
+      <label for="toggle-darkmode">Modo oscuro</label>
+    </div>
+    <div class="extension-toggle">
+      <img id="extension-icon" src="icons/extension-standby.png" alt="Estado de extensión" />
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="opcion">
+      <label for="colorSelect">Color de marcado:</label>
+      <select id="colorSelect">
+        <option value="red">Rojo</option>
+        <option value="blue">Azul</option>
+      </select>
+    </div>
+
+    <div class="opcion">
+      <label for="panel-position">Posición del panel:</label>
+      <select id="panel-position">
+        <option value="top-right">Arriba derecha</option>
+        <option value="top-left">Arriba izquierda</option>
+        <option value="bottom-right">Abajo derecha</option>
+        <option value="bottom-left">Abajo izquierda</option>
+      </select>
+    </div>
+
+    <h2>Opciones de análisis</h2>
+
+    <div class="checkbox-container">
+      <input type="checkbox" id="camuflajeCheckbox" />
+      <label for="camuflajeCheckbox">Activar detección de camuflaje tipográfico</label>
+    </div>
+
+    <div class="checkbox-container">
+      <input type="checkbox" id="mostrarDominioSimple" />
+      <label for="mostrarDominioSimple">Mostrar siempre el dominio</label>
+    </div>
+
+    <button id="guardarBtn">Guardar opciones</button>
+    <div id="estadoGuardado" class="estado"></div>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

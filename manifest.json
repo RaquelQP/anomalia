@@ -1,0 +1,48 @@
+{
+  "manifest_version": 3,
+  "name": "Anomalia — Detector de Enlaces Sospechosos",
+  "description": "Protege tu seguridad en Gmail y Outlook detectando enlaces maliciosos, acortadores, IPs, caracteres Unicode sospechosos y camuflaje tipográfico. Análisis completo de URLs en tiempo real con alertas visuales para prevenir phishing.",
+  "version": "1.0.0",
+
+  "permissions": [
+    "storage",
+    "tabs",
+    "activeTab"
+  ],
+
+  "host_permissions": [
+    "https://mail.google.com/*",
+    "https://outlook.live.com/*"
+  ],
+
+  "content_scripts": [
+    {
+      "matches": [
+        "https://mail.google.com/*",
+        "https://outlook.live.com/*"
+      ],
+      "js": ["content.js"],
+      "css": ["styles/panel.css"],
+      "run_at": "document_idle"
+    }
+  ],
+
+  "background": {
+    "service_worker": "background.js"
+  },
+
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icons/ojo-standby-16.png",
+      "48": "icons/ojo-standby-48.png",
+      "128": "icons/ojo-standby-128.png"
+    }
+  },
+
+  "icons": {
+    "16": "icons/ojo-standby-16.png",
+    "48": "icons/ojo-standby-48.png",
+    "128": "icons/ojo-standby-128.png"
+  }
+}
