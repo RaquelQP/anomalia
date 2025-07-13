@@ -1,0 +1,102 @@
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #f4f4f4;
+  color: #333;
+  margin: 0;
+  padding: 12px;
+  width: 320px;
+}
+
+.header-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.extension-toggle {
+  cursor: pointer;
+  padding: 6px;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 48px;
+  min-height: 48px;
+}
+
+.extension-toggle:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.extension-toggle:active {
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+#extension-icon {
+  width: 36px;
+  height: 36px;
+  object-fit: contain;
+  pointer-events: none;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+h2 {
+  font-size: 16px;
+  margin-bottom: 0;
+  color: #222;
+}
+
+.opcion {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+select {
+  padding: 4px;
+  font-size: 14px;
+}
+
+.checkbox-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: #666;
+}
+
+label {
+  font-size: 14px;
+}
+
+button {
+  background-color: #666;
+  color: #fff;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+button:hover {
+  background-color: #444;
+}
+
+.estado {
+  font-size: 13px;
+  color: #14e638;
+  text-align: center;
+  font-weight: bold;
+}

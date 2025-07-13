@@ -1,0 +1,48 @@
+# Archivos del sistema
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Archivos de IDE/Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Archivos temporales
+*.tmp
+*.temp
+*.log
+
+# Archivos de build/distribución
+dist/
+build/
+*.zip
+*.crx
+
+# Archivos de configuración local
+.env
+.env.local
+.env.production
+
+# Archivos de node_modules (si en el futuro se añaden dependencias)
+node_modules/
+package-lock.json
+yarn.lock
+
+# Archivos de backup
+*.bak
+*.backup
+
+# Archivos de testing (si se añaden en el futuro)
+coverage/
+.nyc_output/
+
+# Archivos de documentación generada
+docs/_build/
+
+# Archivos de Chrome Web Store
+*.pem
+*.crx
+*.zip 
