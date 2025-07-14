@@ -138,9 +138,24 @@ function generarMensajesExplicativos(motivos) {
 function formatearPanelHtml(href, dominioRaiz, mensajes) {
   const urlLegible = decodeURIComponent(href);
   const dominioLegible = dominioRaiz
-  ? dominioRaiz.toUpperCase()
-  : '<span style="color:#e74c3c;">ILEGIBLE</span>';
-  const cuerpoAlertas = mensajes.map(msg => `${msg}<br>`).join('');
+    ? dominioRaiz.toUpperCase()
+    : '<span style="color:#e74c3c;">ILEGIBLE</span>';
+
+  // Mapeo de mensaje a sección de ayuda
+  const ayudaMap = {
+    'Usa caracteres no latinos que pueden camuflarse visualmente': 'unicode',
+    'El destino real está oculto tras un acortador': 'acortadores',
+    'Dirige a una IP en lugar de un dominio reconocible': 'ip',
+    'Incluye usuario o contraseña en la dirección': 'credenciales',
+    'Puede redirigir tras hacer clic': 'redirect',
+    'Contiene letras invisibles o similares': 'homoglifos',
+    'El dominio contiene caracteres ambiguos que pueden inducir a error': 'camuflaje'
+  };
+
+  const cuerpoAlertas = mensajes.map(msg => {
+    // Eliminar el icono de ayuda, dejar solo el mensaje y salto de línea
+    return `${msg}<br>`;
+  }).join('');
 
   return (
     `<strong>URL:</strong> ${urlLegible}<br>` +

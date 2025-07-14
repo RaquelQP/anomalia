@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>Generador de Enlaces con Unicode</title>
+  <style>
+    body {
+      font-family: Consolas, monospace;
+      background: #f4f4f4;
+      padding: 2em;
+    }
+    input, textarea {
+      width: 100%;
+      font-family: Consolas, monospace;
+      margin-top: 1em;
+      padding: 0.5em;
+    }
+    .resultado {
+      margin-top: 2em;
+      background: #fff;
+      border: 1px solid #ccc;
+      padding: 1em;
+      white-space: pre-wrap;
+    }
+    .tipografia {
+      margin-top: 1em;
+      font-size: 0.95em;
+      background: #fff;
+      border-left: 4px solid #555;
+      padding: 0.8em;
+    }
+    .alerta {
+      color: crimson;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h2>🧪 Generador de Enlaces con Unicode (solo para pruebas)</h2>
+  <div class="alerta" style="margin-bottom:1em;">
+    ⚠️ Esta herramienta es solo para fines educativos y de prueba con la extensión Anomalia.<br>
+    Solo puedes generar enlaces con dominios reservados como <b>example.com</b>, <b>test.com</b>, <b>example.org</b> o <b>example.net</b>.<br>
+    No debe usarse para crear enlaces con intención de engañar o perjudicar a otras personas.
+  </div>
+  <label for="unicodeInput">Introduce una URL de prueba con códigos Unicode (ej: https://examp\u2113e.com):</label>
+  <input type="text" id="unicodeInput" placeholder="https://examp\u2113e.com" />
+
+  <div class="resultado" id="renderedOutput"></div>
+  <div class="tipografia" id="diagnosisOutput"></div>
+
+  <script>
+    const input = document.getElementById('unicodeInput');
+    const output = document.getElementById('renderedOutput');
+    const diagnosis = document.getElementById('diagnosisOutput');
+
+    function renderUnicode(str) {
+      return str.replace(/\\u([0-9a-fA-F]{4})/g, (_, hex) =>
+        String.fromCharCode(parseInt(hex, 16))
+      );
+    }
+
+    function detectarBloquesUnicode(str) {
+      const bloques = {
+        'Cirílico': [0x0400, 0x04FF],
+        'Suplemento cirílico': [0x0500, 0x052F],
+        'Griego': [0x0370, 0x03FF],
+        'Armenio': [0x0530, 0x058F],
+        'Hebreo': [0x0590, 0x05FF],
+        'Latino': [0x0000, 0x007F]
+      };
+
+      const detecciones = {};
+
+      for (const char of str) {
+        const code = char.charCodeAt(0);
+        for (const nombre in bloques) {
+          const [inicio, fin] = bloques[nombre];
+          if (code >= inicio && code <= fin) {
+            detecciones[nombre] = true;
+          }
+        }
+      }
+
+      return Object.keys(detecciones);
+    }
+
+    function esDominioSeguro(url) {
+      try {
+        const u = new URL(url);
+        return [
+          'example.com',
+          'test.com',
+          'example.org',
+          'example.net'
+        ].includes(u.hostname.replace(/^www\./, ''));
+      } catch {
+        return false;
+      }
+    }
+
+    input.addEventListener('input', () => {
+      const raw = input.value;
+      const decoded = renderUnicode(raw);
+      let esSeguro = false;
+      let mensaje = '';
+      try {
+        esSeguro = esDominioSeguro(decoded);
+      } catch {}
+
+      if (!esSeguro) {
+        output.innerHTML = '<span class="alerta">Solo se permiten dominios de prueba: example.com, test.com, example.org, example.net</span>';
+        diagnosis.innerHTML = '';
+        return;
+      }
+
+      // Mostrar enlace clicable seguro
+      output.innerHTML = `<a href="${decoded}" target="_blank">${decoded}</a>`;
+
+      const tipos = detectarBloquesUnicode(decoded);
+      if (tipos.length > 0) {
+        diagnosis.innerHTML = `<span class="alerta">⚠ Detectado alfabeto(s):</span> ${tipos.join(', ')}`;
+      } else {
+        diagnosis.innerHTML = `<span class="alerta">✅ Sin grafías sospechosas detectadas.</span>`;
+      }
+    });
+  </script>
+</body>
+</html>

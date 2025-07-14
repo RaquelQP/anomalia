@@ -53,3 +53,10 @@ y este proyecto adhiere a [Semantic Versioning](https://semver.org/spec/v2.0.0.h
 ### Instalación
 1. Descargar desde Chrome Web Store (recomendado)
 2. O instalar en modo desarrollador desde el código fuente 
+
+## [1.1.0] - YYYY-MM-DD
+### Añadido
+- Ayuda didáctica accesible desde el popup
+- Recursos de prueba y ejemplos en la Wiki
+- Herramienta generadora de enlaces segura
+- Mejoras en la experiencia de usuario y documentación 
