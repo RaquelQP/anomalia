@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Ayuda — Anomalia</title>
+  <link rel="stylesheet" href="styles/popup.css">
+  <style>
+    body { font-family: Arial, sans-serif; margin: 2em; background: #fff; color: #222; }
+    h1, h2 { color: #1a73e8; }
+    .ejemplo { background: #f3f3f3; border-left: 4px solid #1a73e8; padding: 0.5em 1em; margin: 1em 0; }
+    a { color: #1a73e8; }
+    nav { margin-bottom: 2em; }
+    nav a { margin-right: 1em; }
+    .ayuda-icono { width: 18px; height: 18px; vertical-align: middle; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <h1>¿Cómo funciona Anomalia?</h1>
+  <p>
+    Anomalia te ayuda a identificar enlaces sospechosos en tu correo electrónico. <b>No impide la conexión a ningún enlace</b>; únicamente muestra una advertencia final para que tomes una decisión informada antes de hacer clic.
+  </p>
+  <div style="background:#f8f8f8;border-left:5px solid #e74c3c;padding:1em;margin-bottom:1em;">
+    <strong>🔴 Alerta roja:</strong> Los enlaces marcados en <span style="color:#e74c3c;font-weight:bold;">rojo</span> son considerados de <b>riesgo</b> y la protección está <b>siempre activa</b>. Estos enlaces presentan características que suelen asociarse a intentos de engaño, fraude o suplantación de identidad.
+  </div>
+  <div style="background:#fff7e6;border-left:5px solid #fca652;padding:1em;margin-bottom:2em;">
+    <strong>🟠 Alerta naranja:</strong> Los enlaces marcados en <span style="color:#fca652;font-weight:bold;">naranja</span> corresponden a una <b>opción avanzada</b> y <b>no siempre indican peligro</b>, pero pueden ser usados con fines poco éticos o para confundir. Se recomienda prestar atención y revisar el enlace antes de hacer clic.
+  </div>
+  <nav>
+    <a href="#acortadores">Acortadores</a>
+    <a href="#ip">Enlaces a IPs</a>
+    <a href="#unicode">Unicode</a>
+    <a href="#credenciales">Credenciales</a>
+    <a href="#redirect">Redirecciones</a>
+    <a href="#homoglifos">Homoglifos</a>
+    <a href="#camuflaje">Camuflaje</a>
+  </nav>
+
+  <h2 id="acortadores">🔴 Acortadores de URL</h2>
+  <p>Los acortadores como <b>bit.ly</b>, <b>t.co</b> o <b>goo.gl</b> ocultan el destino real del enlace.</p>
+  <div class="ejemplo">
+    Ejemplo: <code>https://bit.ly/3xYzAbC</code>
+  </div>
+  <p>Recomendación: Si no confías en el remitente, no hagas clic. Puedes comprobar el destino en <a href="https://www.expandurl.net/" target="_blank">ExpandURL</a>.</p>
+
+  <h2 id="ip">🔴 Enlaces a direcciones IP</h2>
+  <p>Un enlace que apunta directamente a una IP puede ser sospechoso.</p>
+  <div class="ejemplo">
+    Ejemplo: <code>http://192.168.1.1/login</code>
+  </div>
+  <p>Comprueba la IP en <a href="https://whois.domaintools.com/" target="_blank">Whois</a> o <a href="https://www.virustotal.com/" target="_blank">VirusTotal</a>.</p>
+
+  <h2 id="unicode">🔴 Caracteres Unicode sospechosos</h2>
+  <p>Algunos enlaces usan letras de otros alfabetos para parecer legítimos.</p>
+  <div class="ejemplo">
+    Ejemplo: <code>paypaⅼ.com</code> (la "l" es una letra griega, no una "l" latina)
+  </div>
+  <p>Si ves un enlace raro, desconfía y revisa la dirección cuidadosamente.</p>
+
+  <h2 id="credenciales">🔴 Credenciales en URLs</h2>
+  <p>Si una URL contiene usuario y contraseña, puede ser un intento de engaño.</p>
+  <div class="ejemplo">
+    Ejemplo: <code>http://usuario:contraseña@ejemplo.com</code>
+  </div>
+  <p>No introduzcas tus datos en sitios sospechosos.</p>
+
+  <h2 id="redirect">🔴 Redirecciones sospechosas</h2>
+  <p>Algunos enlaces usan parámetros como <b>redirect</b>, <b>url</b> o <b>next</b> para enviarte a otro sitio.</p>
+  <div class="ejemplo">
+    Ejemplo: <code>https://ejemplo.com?redirect=http://malicioso.com</code>
+  </div>
+  <p>Puedes analizar el enlace en <a href="https://www.virustotal.com/" target="_blank">VirusTotal</a>.</p>
+
+  <h2 id="homoglifos">🔴 Homoglifos y caracteres invisibles</h2>
+  <p>Algunos enlaces usan caracteres invisibles o de control para camuflarse, o bien letras que parecen iguales pero son de alfabetos distintos (homoglifos).</p>
+  <div class="ejemplo">
+    Ejemplo: <code>micros–ft.com</code> (el guion es un guion largo Unicode, no el guion normal)
+  </div>
+  <p>Si tienes dudas, copia el enlace y pégalo en un editor de texto para revisarlo.</p>
+
+  <h2 id="camuflaje">🟠 Camuflaje tipográfico</h2>
+  <p>Algunos enlaces usan caracteres similares para engañar (por ejemplo, "0" y "O", "1" y "l").</p>
+  <div class="ejemplo">
+    Ejemplo: <code>micros0ft.com</code> (con un cero en vez de "o")</div>
+  <p>Fíjate bien en los caracteres antes de hacer clic.</p>
+
+  <hr>
+  <p>¿Tienes dudas? Consulta la <a href="https://github.com/RaquelQP/anomalia/wiki" target="_blank">Wiki</a> o abre una <a href="https://github.com/RaquelQP/anomalia/issues" target="_blank">issue</a>.</p>
+  <p style="font-size: 0.95em; color: #555; margin-top: 2em;">
+    <b>Recuerda:</b> Pueden realizarse intentos de phishing a través de otros medios y no se han recogido todos los tipos de caracteres confusos que existen. Por tanto, <b>actúa siempre con precaución</b> antes de pulsar un enlace desde tu correo electrónico y mantén una actitud responsable.
+  </p>
+  <div style="margin-top:2em; font-size:0.98em; background:#f8f8f8; border-left:4px solid #1a73e8; padding:1em;">
+    <b>¿Quieres experimentar?</b> En la <a href="https://github.com/RaquelQP/anomalia/wiki/Enlaces-de-prueba-para-Anomalia" target="_blank">Wiki del proyecto</a> tienes una <b>lista de enlaces de prueba</b> y acceso a la <b>herramienta generadora de enlaces</b> para que puedas comprobar cómo funciona la extensión en diferentes escenarios.
+  </div>
+</body>
+</html> 

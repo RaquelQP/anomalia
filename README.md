@@ -1,8 +1,8 @@
 # Anomalia — Detector de Enlaces Sospechosos
 
-[![Chrome Web Store](https://img.shields.io/badge/Chrome%20Web%20Store-v1.0.0-blue?logo=google-chrome)](https://chrome.google.com/webstore/detail/anomalia)
+[![Chrome Web Store](https://img.shields.io/badge/Chrome%20Web%20Store-v1.1.0-blue?logo=google-chrome)](https://chrome.google.com/webstore/detail/anomalia)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Version](https://img.shields.io/badge/version-1.0.0-green.svg)](https://github.com/RaquelQP/anomalia/releases)
+[![Version](https://img.shields.io/badge/version-1.1.0-green.svg)](https://github.com/RaquelQP/anomalia/releases)
 [![Chrome Version](https://img.shields.io/badge/Chrome-88+-green?logo=google-chrome)](https://www.google.com/chrome/)
 
 Una extensión de Chrome que protege tu seguridad en Gmail y Outlook detectando enlaces potencialmente maliciosos en tiempo real.
@@ -81,3 +81,10 @@ Para reportar vulnerabilidades de seguridad, consulta nuestra [Política de Segu
 ## 📋 Changelog
 
 Ver [CHANGELOG.md](CHANGELOG.md) para un historial completo de cambios. 
+
+## 🆕 Novedades en la versión 1.1.0
+
+- Nueva ayuda didáctica accesible desde el popup
+- Recursos de prueba y ejemplos en la Wiki
+- Herramienta generadora de enlaces segura
+- Mejoras en la experiencia de usuario y documentación 
