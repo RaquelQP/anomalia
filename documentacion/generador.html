@@ -1,3 +1,19 @@
+<!--
+Ejemplos de códigos Unicode para probar en el generador:
+
+| Carácter | Descripción                | Código Unicode      | Ejemplo de uso en URL                  |
+|----------|----------------------------|---------------------|----------------------------------------|
+| ⅼ        | “l” griega (letra ele)     | \u2113             | https://examp\u2113e.com               |
+| о        | “o” cirílica               | \u043E             | https://g\u043Eogle.com                |
+| а        | “a” cirílica               | \u0430             | https://p\u0430ypal.com                |
+| –        | Guion largo Unicode        | \u2013             | https://micros\u2013ft.com             |
+| ı        | “i” latina sin punto       | \u0131             | https://m\u0131crosoft.com             |
+| Ι        | “I” griega mayúscula       | \u0399             | https://m\u0399crosoft.com             |
+| Ο        | “O” griega mayúscula       | \u039F             | https://micr\u039Fsoft.com             |
+| 0        | Cero (no Unicode, pero útil para camuflaje) | 0 | https://micros0ft.com                |
+
+Puedes copiar el código Unicode (\uXXXX) en la URL de prueba para ver cómo la extensión lo detecta.
+-->
 <!DOCTYPE html>
 <html>
 <head>
@@ -47,6 +63,31 @@
 
   <div class="resultado" id="renderedOutput"></div>
   <div class="tipografia" id="diagnosisOutput"></div>
+
+  <div style="margin-top:2em; background:#fff; border:1px solid #ccc; padding:1em; font-size:0.98em;">
+    <b>Ejemplos de códigos Unicode para probar:</b>
+    <table style="margin-top:0.5em; border-collapse:collapse; width:100%;">
+      <thead>
+        <tr style="background:#f8f8f8;">
+          <th style="border:1px solid #ccc; padding:4px;">Carácter</th>
+          <th style="border:1px solid #ccc; padding:4px;">Descripción</th>
+          <th style="border:1px solid #ccc; padding:4px;">Código Unicode</th>
+          <th style="border:1px solid #ccc; padding:4px;">Ejemplo de uso en URL</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td style="border:1px solid #ccc; padding:4px;">ⅼ</td><td style="border:1px solid #ccc; padding:4px;">“l” griega (letra ele)</td><td style="border:1px solid #ccc; padding:4px;">\u2113</td><td style="border:1px solid #ccc; padding:4px;">https://examp\u2113e.com</td></tr>
+        <tr><td style="border:1px solid #ccc; padding:4px;">о</td><td style="border:1px solid #ccc; padding:4px;">“o” cirílica</td><td style="border:1px solid #ccc; padding:4px;">\u043E</td><td style="border:1px solid #ccc; padding:4px;">https://g\u043Eogle.com</td></tr>
+        <tr><td style="border:1px solid #ccc; padding:4px;">а</td><td style="border:1px solid #ccc; padding:4px;">“a” cirílica</td><td style="border:1px solid #ccc; padding:4px;">\u0430</td><td style="border:1px solid #ccc; padding:4px;">https://p\u0430ypal.com</td></tr>
+        <tr><td style="border:1px solid #ccc; padding:4px;">–</td><td style="border:1px solid #ccc; padding:4px;">Guion largo Unicode</td><td style="border:1px solid #ccc; padding:4px;">\u2013</td><td style="border:1px solid #ccc; padding:4px;">https://micros\u2013ft.com</td></tr>
+        <tr><td style="border:1px solid #ccc; padding:4px;">ı</td><td style="border:1px solid #ccc; padding:4px;">“i” latina sin punto</td><td style="border:1px solid #ccc; padding:4px;">\u0131</td><td style="border:1px solid #ccc; padding:4px;">https://m\u0131crosoft.com</td></tr>
+        <tr><td style="border:1px solid #ccc; padding:4px;">Ι</td><td style="border:1px solid #ccc; padding:4px;">“I” griega mayúscula</td><td style="border:1px solid #ccc; padding:4px;">\u0399</td><td style="border:1px solid #ccc; padding:4px;">https://m\u0399crosoft.com</td></tr>
+        <tr><td style="border:1px solid #ccc; padding:4px;">Ο</td><td style="border:1px solid #ccc; padding:4px;">“O” griega mayúscula</td><td style="border:1px solid #ccc; padding:4px;">\u039F</td><td style="border:1px solid #ccc; padding:4px;">https://micr\u039Fsoft.com</td></tr>
+        <tr><td style="border:1px solid #ccc; padding:4px;">0</td><td style="border:1px solid #ccc; padding:4px;">Cero (no Unicode, pero útil para camuflaje)</td><td style="border:1px solid #ccc; padding:4px;">0</td><td style="border:1px solid #ccc; padding:4px;">https://micros0ft.com</td></tr>
+      </tbody>
+    </table>
+    <div style="margin-top:0.5em; color:#555; font-size:0.97em;">Puedes copiar el código Unicode (\uXXXX) en la URL de prueba para ver cómo la extensión lo detecta.</div>
+  </div>
 
   <script>
     const input = document.getElementById('unicodeInput');
