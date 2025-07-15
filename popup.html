@@ -23,6 +23,11 @@
 
   <div class="container">
     <div class="opcion">
+      <label for="mostrarDominioSimple">Mostrar siempre el dominio</label>
+      <input type="checkbox" id="mostrarDominioSimple" />
+    </div>
+
+    <div class="opcion">
       <label for="colorSelect">Color de marcado:</label>
       <select id="colorSelect">
         <option value="red">Rojo</option>
@@ -38,18 +43,6 @@
         <option value="bottom-right">Abajo derecha</option>
         <option value="bottom-left">Abajo izquierda</option>
       </select>
-    </div>
-
-    <h2>Opciones de análisis</h2>
-
-    <div class="checkbox-container">
-      <input type="checkbox" id="camuflajeCheckbox" />
-      <label for="camuflajeCheckbox">Activar detección de camuflaje tipográfico</label>
-    </div>
-
-    <div class="checkbox-container">
-      <input type="checkbox" id="mostrarDominioSimple" />
-      <label for="mostrarDominioSimple">Mostrar siempre el dominio</label>
     </div>
 
     <button id="guardarBtn">Guardar opciones</button>

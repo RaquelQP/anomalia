@@ -60,3 +60,24 @@ y este proyecto adhiere a [Semantic Versioning](https://semver.org/spec/v2.0.0.h
 - Recursos de prueba y ejemplos en la Wiki
 - Herramienta generadora de enlaces segura
 - Mejoras en la experiencia de usuario y documentación 
+
+## [1.2.0] - YYYY-MM-DD
+### Añadido
+- Detección automática y no configurable de camuflaje tipográfico
+- Panel informativo con mensajes claros y diferenciados por nivel de riesgo
+- Uso de emojis 🚫 y ⚠️ para distinguir entre peligro y precaución
+- Advertencia leve cuando no se pueden obtener datos registrales o el TLD no está soportado
+- Sección de ayuda completamente actualizada y adaptada a todos los cambios
+- Aviso para usuarios avanzados sobre consulta de datos en la consola
+- Soporte RDAP ampliado (incluido TLD .it)
+
+### Mejorado
+- Limpieza de opciones y simplificación de la interfaz
+- Reducción de falsos positivos y experiencia visual más limpia
+- Todos los textos y mensajes en registro formal (usted)
+- Eliminados permisos innecesarios y recursos web accesibles no requeridos
+- Compatibilidad confirmada con Chrome, Edge y Brave
+
+### Corregido
+- Manejo robusto de errores y advertencias en paneles
+- Eliminación de mensajes duplicados en advertencias leves

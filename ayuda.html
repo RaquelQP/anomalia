@@ -17,7 +17,11 @@
 <body>
   <h1>¿Cómo funciona Anomalia?</h1>
   <p>
-    Anomalia te ayuda a identificar enlaces sospechosos en tu correo electrónico. Aquí puedes aprender qué significa cada advertencia y cómo actuar.
+    Anomalia le ayuda a identificar enlaces sospechosos en su correo electrónico. Los avisos pueden ir acompañados de símbolos para que sepa cómo actuar:
+    <br>
+    <span style="font-size:1.2em;">🚫</span> <b>Peligro:</b> Evite hacer clic, el enlace es muy sospechoso.<br>
+    <span style="font-size:1.2em;">⚠️</span> <b>Precaución:</b> Examine el enlace con atención, puede ser peligroso.<br>
+    Si ve una advertencia sin símbolo, significa que no se ha podido evaluar el riesgo por falta de datos.
   </p>
   <nav>
     <a href="#acortadores">Acortadores</a>
@@ -27,56 +31,67 @@
     <a href="#credenciales">Credenciales</a>
     <a href="#redirect">Redirecciones</a>
     <a href="#homoglifos">Homoglifos</a>
+    <a href="#sin-datos">Falta de datos</a>
   </nav>
 
-  <h2 id="acortadores">Acortadores de URL</h2>
+  <h2 id="acortadores">⚠️ Acortadores de URL</h2>
   <p>Los acortadores como <b>bit.ly</b>, <b>t.co</b> o <b>goo.gl</b> ocultan el destino real del enlace.</p>
   <div class="ejemplo">
     Ejemplo: <code>https://bit.ly/3xYzAbC</code>
   </div>
-  <p>Recomendación: Si no confías en el remitente, no hagas clic. Puedes comprobar el destino en <a href="https://www.expandurl.net/" target="_blank">ExpandURL</a>.</p>
+  <p>Recomendación: Si no confía en el remitente, no haga clic. Puede comprobar el destino en <a href="https://www.expandurl.net/" target="_blank">ExpandURL</a>.</p>
 
-  <h2 id="ip">Enlaces a direcciones IP</h2>
-  <p>Un enlace que apunta directamente a una IP puede ser sospechoso.</p>
+  <h2 id="ip">🚫 Enlaces a direcciones IP</h2>
+  <p>Un enlace que apunta directamente a una IP puede ser muy sospechoso.</p>
   <div class="ejemplo">
     Ejemplo: <code>http://192.168.1.1/login</code>
   </div>
-  <p>Comprueba la IP en <a href="https://whois.domaintools.com/" target="_blank">Whois</a> o <a href="https://www.virustotal.com/" target="_blank">VirusTotal</a>.</p>
+  <p>Compruebe la IP en <a href="https://whois.domaintools.com/" target="_blank">Whois</a> o <a href="https://www.virustotal.com/" target="_blank">VirusTotal</a>.</p>
 
-  <h2 id="unicode">Caracteres Unicode sospechosos</h2>
+  <h2 id="unicode">🚫 Caracteres Unicode sospechosos</h2>
   <p>Algunos enlaces usan letras de otros alfabetos para parecer legítimos.</p>
   <div class="ejemplo">
     Ejemplo: <code>paypaⅼ.com</code> (la "l" es una letra griega, no una "l" latina)
   </div>
-  <p>Si ves un enlace raro, desconfía y revisa la dirección cuidadosamente.</p>
+  <p>Si observa un enlace raro, desconfíe y evítelo.</p>
 
-  <h2 id="camuflaje">Camuflaje tipográfico</h2>
+  <h2 id="camuflaje">⚠️ Camuflaje tipográfico</h2>
   <p>Algunos enlaces usan caracteres similares para engañar (por ejemplo, "0" y "O", "1" y "l").</p>
   <div class="ejemplo">
     Ejemplo: <code>micros0ft.com</code> (con un cero en vez de "o")</div>
-  <p>Fíjate bien en los caracteres antes de hacer clic.</p>
+  <p>Fíjese bien en los caracteres antes de hacer clic.</p>
 
-  <h2 id="credenciales">Credenciales en URLs</h2>
+  <h2 id="credenciales">🚫 Credenciales en URLs</h2>
   <p>Si una URL contiene usuario y contraseña, puede ser un intento de engaño.</p>
   <div class="ejemplo">
     Ejemplo: <code>http://usuario:contraseña@ejemplo.com</code>
   </div>
-  <p>No introduzcas tus datos en sitios sospechosos.</p>
+  <p>No introduzca sus datos en sitios sospechosos.</p>
 
-  <h2 id="redirect">Redirecciones sospechosas</h2>
-  <p>Algunos enlaces usan parámetros como <b>redirect</b>, <b>url</b> o <b>next</b> para enviarte a otro sitio.</p>
+  <h2 id="redirect">⚠️ Redirecciones sospechosas</h2>
+  <p>Algunos enlaces usan parámetros como <b>redirect</b>, <b>url</b> o <b>next</b> para enviarle a otro sitio.</p>
   <div class="ejemplo">
     Ejemplo: <code>https://ejemplo.com?redirect=http://malicioso.com</code>
   </div>
-  <p>Puedes analizar el enlace en <a href="https://www.virustotal.com/" target="_blank">VirusTotal</a>.</p>
+  <p>Puede analizar el enlace en <a href="https://www.virustotal.com/" target="_blank">VirusTotal</a>.</p>
 
-  <h2 id="homoglifos">Homoglifos y caracteres invisibles</h2>
+  <h2 id="homoglifos">🚫 Homoglifos y caracteres invisibles</h2>
   <p>Algunos enlaces usan caracteres invisibles o de control para camuflarse.</p>
   <div class="ejemplo">
     Ejemplo: <code>gоogle.com</code> (la "o" es cirílica, no latina)
   </div>
-  <p>Si tienes dudas, copia el enlace y pégalo en un editor de texto para revisarlo.</p>
+  <p>Si tiene dudas, copie el enlace (sin pulsarlo) y péguelo en un editor de texto para revisarlo.</p>
 
+  <h2 id="sin-datos">Advertencia por falta de datos</h2>
+  <p>
+    Si ve el mensaje:<br>
+    <span class="ejemplo">Precaución. No se han podido obtener los datos registrales ni evaluar el riesgo asociado. Compruebe que el nombre de dominio sea correcto antes de pulsar.</span>
+    <br>
+    Significa que no se ha podido comprobar la fiabilidad del dominio. Revise el nombre del dominio con especial atención antes de hacer clic.
+  </p>
+  <p style="font-size:0.95em;color:#555;">
+    <b>¿Es usuario avanzado?</b> Puede consultar los datos registrales y detalles técnicos de cada dominio directamente en la consola de su navegador (F12 &rarr; pestaña <b>Consola</b>).
+  </p>
   <hr>
   <p>¿Tienes dudas? Consulta la <a href="https://github.com/RaquelQP/anomalia/wiki" target="_blank">Wiki</a> o abre una <a href="https://github.com/RaquelQP/anomalia/issues" target="_blank">issue</a>.</p>
 </body>
