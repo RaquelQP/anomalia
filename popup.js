@@ -1,7 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
   // Referencias del DOM
   const colorSelect = document.getElementById('colorSelect');
-  const camuflajeCheckbox = document.getElementById('camuflajeCheckbox');
   const guardarBtn = document.getElementById('guardarBtn');
   const estadoGuardado = document.getElementById('estadoGuardado');
   const extensionIcon = document.getElementById('extension-icon');
@@ -28,14 +27,12 @@ document.addEventListener('DOMContentLoaded', () => {
   // Cargar configuración desde storage
   chrome.storage.sync.get([
     'color',
-    'detectarCamuflaje',
     'extensionActiva',
     'modoOscuro',
     'posicionPanel',
     'mostrarDominioSimple'
   ], datos => {
     if (datos.color) colorSelect.value = datos.color;
-    camuflajeCheckbox.checked = !!datos.detectarCamuflaje;
     toggleDarkMode.checked = datos.modoOscuro === true;
     positionSelect.value = datos.posicionPanel || 'top-right';
     mostrarDominioSimple.checked = datos.mostrarDominioSimple === true;
@@ -83,7 +80,6 @@ document.addEventListener('DOMContentLoaded', () => {
     chrome.storage.sync.get('extensionActiva', (datos) => {
       const nuevasOpciones = {
         color: colorSelect.value,
-        detectarCamuflaje: camuflajeCheckbox.checked,
         extensionActiva: datos.extensionActiva !== false, // Mantener el estado actual
         modoOscuro: toggleDarkMode.checked,
         posicionPanel: positionSelect.value,

@@ -1,64 +1,76 @@
 # Anomalia — Detector de Enlaces Sospechosos
 
-[![Chrome Web Store](https://img.shields.io/badge/Chrome%20Web%20Store-v1.1.0-blue?logo=google-chrome)](https://chrome.google.com/webstore/detail/anomalia)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Version](https://img.shields.io/badge/version-1.1.0-green.svg)](https://github.com/RaquelQP/anomalia/releases)
+[![Version](https://img.shields.io/badge/version-1.2.0-green.svg)](https://github.com/RaquelQP/anomalia/releases)
 [![Chrome Version](https://img.shields.io/badge/Chrome-88+-green?logo=google-chrome)](https://www.google.com/chrome/)
 
-Una extensión de Chrome que protege tu seguridad en Gmail y Outlook detectando enlaces potencialmente maliciosos en tiempo real.
+Una extensión de Chrome que protege su seguridad en Gmail y Outlook detectando enlaces potencialmente maliciosos en tiempo real.
 
 ## 🛡️ Características
 
 - **Detección de acortadores**: Identifica servicios como bit.ly, t.co, goo.gl, etc.
 - **Análisis de IPs**: Detecta enlaces que apuntan directamente a direcciones IP
 - **Caracteres Unicode sospechosos**: Identifica alfabetos cirílicos, griegos, armenios y otros que pueden camuflarse
-- **Camuflaje tipográfico**: Detecta caracteres similares (0/O, 1/l, etc.)
+- **Camuflaje tipográfico**: Detección automática de caracteres similares (0/O, 1/l, etc.)
 - **Credenciales en URLs**: Alerta sobre URLs que contienen usuario/contraseña
 - **Parámetros de redirección**: Detecta parámetros sospechosos como 'redirect', 'url', 'next'
 - **Homoglifos**: Identifica caracteres invisibles y de control
+- **Análisis de datos registrales (RDAP)**: Consulta y analiza registro, renovación y expiración de dominios para los TLDs más populares (.com, .net, .org, .es, .io, .ai, .co, .it, etc.)
+- **Panel informativo con emojis**: Mensajes claros y diferenciados por nivel de riesgo con 🚫 (peligro) y ⚠️ (precaución)
+- **Advertencia leve**: Si no se pueden obtener datos registrales o el TLD no está soportado
 
 ## 🎯 Compatibilidad
 
+- ✅ Chrome
+- ✅ Edge
+- ✅ Brave
 - ✅ Gmail (mail.google.com)
 - ✅ Outlook Web (outlook.live.com)
 
 ## ⚙️ Configuración
 
 - **Color de marcado**: Rojo o azul
-- **Análisis completo**: Evalúa toda la URL para máxima seguridad
-- **Detección de camuflaje**: Activación opcional
-- **Mostrar dominio**: Opción para mostrar siempre el dominio real
+- **Mostrar siempre el dominio**: Opción para mostrar siempre el dominio real
 - **Posición del panel**: 4 posiciones configurables
 - **Modo oscuro**: Interfaz adaptativa
 
 ## 🔒 Privacidad
 
 - **Sin recopilación de datos**: La extensión no envía información a servidores externos
-- **Análisis local**: Todo el procesamiento se realiza en tu navegador
-- **Sin tracking**: No se rastrean tus actividades
+- **Análisis local**: Todo el procesamiento se realiza en su navegador
+- **Sin tracking**: No se rastrean sus actividades
 
 ## 📦 Instalación
 
-1. Descarga la extensión desde Chrome Web Store
-2. Activa la extensión en Gmail o Outlook
-3. Configura tus preferencias desde el popup
-4. ¡Listo! Los enlaces sospechosos se marcarán automáticamente
+1. Descargue o clone este repositorio
+2. Abra Chrome y vaya a `chrome://extensions/`
+3. Active "Modo desarrollador"
+4. Haga clic en "Cargar descomprimida" y seleccione la carpeta del proyecto
+5. Active la extensión en Gmail o Outlook
+6. Configure sus preferencias desde el popup
+7. ¡Listo! Los enlaces sospechosos se marcarán automáticamente
 
 ## 🚀 Uso
 
-1. Abre Gmail o Outlook Web
+1. Abra Gmail o Outlook Web
 2. La extensión analizará automáticamente todos los enlaces
 3. Los enlaces sospechosos se marcarán con un contorno de color
-4. Pasa el mouse sobre un enlace marcado para ver detalles
+4. Pase el mouse sobre un enlace marcado para ver detalles
 5. El panel mostrará información sobre por qué el enlace es sospechoso
+6. **Emojis en el panel:**
+   - 🚫 Peligro: Evite hacer clic, el enlace es muy sospechoso
+   - ⚠️ Precaución: Examine el enlace con atención, puede ser peligroso
+   - Sin emoji: No se ha podido evaluar el riesgo por falta de datos
+7. Si aparece una advertencia leve, revise el dominio cuidadosamente antes de hacer clic
+8. Usuarios avanzados pueden consultar los datos registrales y técnicos en la consola del navegador (F12 → Consola)
 
 ## 🔧 Desarrollo
 
 Para desarrollo local:
-1. Clona este repositorio
-2. Abre Chrome y ve a `chrome://extensions/`
-3. Activa "Modo desarrollador"
-4. Haz clic en "Cargar descomprimida" y selecciona la carpeta del proyecto
+1. Clone este repositorio
+2. Abra Chrome y vaya a `chrome://extensions/`
+3. Active "Modo desarrollador"
+4. Haga clic en "Cargar descomprimida" y seleccione la carpeta del proyecto
 
 ## 📄 Licencia
 
@@ -66,11 +78,11 @@ Este proyecto está bajo licencia MIT. Ver [LICENSE](LICENSE) para más detalles
 
 ## 🤝 Contribuciones
 
-Las contribuciones son bienvenidas. Por favor, consulta nuestra [Guía de Contribución](CONTRIBUTING.md) antes de enviar un pull request.
+Las contribuciones son bienvenidas. Por favor, consulte nuestra [Guía de Contribución](CONTRIBUTING.md) antes de enviar un pull request.
 
 ## 🔒 Seguridad
 
-Para reportar vulnerabilidades de seguridad, consulta nuestra [Política de Seguridad](SECURITY.md).
+Para reportar vulnerabilidades de seguridad, consulte nuestra [Política de Seguridad](SECURITY.md).
 
 ## 📞 Soporte
 
@@ -82,9 +94,19 @@ Para reportar vulnerabilidades de seguridad, consulta nuestra [Política de Segu
 
 Ver [CHANGELOG.md](CHANGELOG.md) para un historial completo de cambios. 
 
-## 🆕 Novedades en la versión 1.1.0
+## 🆕 Novedades en la versión 1.2.0
 
-- Nueva ayuda didáctica accesible desde el popup
-- Recursos de prueba y ejemplos en la Wiki
-- Herramienta generadora de enlaces segura
-- Mejoras en la experiencia de usuario y documentación 
+- Detección automática y no configurable de camuflaje tipográfico
+- Panel informativo con mensajes claros y diferenciados por nivel de riesgo
+- Uso de emojis 🚫 y ⚠️ para distinguir entre peligro y precaución
+- Advertencia leve cuando no se pueden obtener datos registrales o el TLD no está soportado
+- Análisis de datos registrales (registro, renovación, expiración) de dominios mediante RDAP para los TLDs más populares
+- Sección de ayuda completamente actualizada y adaptada a todos los cambios
+- Aviso para usuarios avanzados sobre consulta de datos en la consola
+- Limpieza de opciones y simplificación de la interfaz
+- Reducción de falsos positivos y experiencia visual más limpia
+- Compatibilidad confirmada con Chrome, Edge y Brave
+- Eliminados permisos innecesarios y recursos web accesibles no requeridos
+- Manejo robusto de errores y advertencias en paneles
+- Eliminación de mensajes duplicados en advertencias leves
+- Coherencia en el trato formal en toda la extensión 
