@@ -72,9 +72,9 @@ Para desarrollo local:
 3. Active "Modo desarrollador"
 4. Haga clic en "Cargar descomprimida" y seleccione la carpeta del proyecto
 
-## 📄 Licencia
+## Licencia
 
-Este proyecto está bajo licencia MIT. Ver [LICENSE](LICENSE) para más detalles.
+Este proyecto está licenciado bajo la Licencia Pública General GNU v3.0 (GPL v3). Consulte el archivo LICENSE para más detalles.
 
 ## 🤝 Contribuciones
 

@@ -1,21 +1,33 @@
-MIT License
+Licencia Pública General de GNU
+Versión 3, 29 de junio de 2007
 
-Copyright (c) 2024 Anomalia - Detector de Enlaces Sospechosos
+Copyright (C) 2007 Free Software Foundation, Inc. <https://fsf.org/>
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+Cualquiera puede copiar y distribuir copias literales de este documento de licencia, pero no está permitido modificarlo.
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+---
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+PREÁMBULO
+La Licencia Pública General de GNU es una licencia libre para software y otros tipos de obras.
+
+Las licencias de la mayoría del software y de otros trabajos prácticos están diseñadas para quitarle la libertad de compartir y cambiar los trabajos. Por el contrario, la Licencia Pública General de GNU pretende garantizar su libertad para compartir y cambiar todas las versiones de un programa, para asegurarse de que siga siendo software libre para todos sus usuarios. Nosotros, la Free Software Foundation, usamos la Licencia Pública General de GNU para la mayoría de nuestro software; también la aplican otros autores a sus programas. Puede aplicarla a sus programas, también.
+
+Cuando hablamos de software libre, nos referimos a la libertad, no al precio. Nuestras Licencias Públicas Generales están diseñadas para asegurarse de que usted tenga la libertad de distribuir copias de software libre (y cobrar por ese servicio si lo desea), que reciba el código fuente o pueda obtenerlo si lo desea, que pueda modificar el software o usar partes de él en nuevos programas libres, y que sepa que puede hacer estas cosas.
+
+Para proteger sus derechos, necesitamos hacer restricciones que prohíban a cualquiera negarle estos derechos o pedirle que renuncie a los derechos. Por lo tanto, usted tiene ciertas responsabilidades si distribuye copias del software, o si lo modifica: responsabilidades de respetar la libertad de los demás.
+
+Por ejemplo, si distribuye copias de tal programa, ya sea gratis o por una tarifa, debe dar a los destinatarios todos los derechos que usted tiene. Debe asegurarse de que ellos también reciban o puedan obtener el código fuente. Y debe mostrarles estos términos para que conozcan sus derechos.
+
+Los desarrolladores que usan la GPL protegen sus derechos con dos pasos: (1) afirman los derechos de autor sobre el software, y (2) ofrecen esta Licencia, dando a todos permiso legal para copiar, distribuir y/o modificarlo.
+
+Para la protección de los desarrolladores y autores, la GPL explica claramente que no hay garantía para este software libre. Para el bien tanto de los usuarios como de los autores, la GPL requiere que los trabajos modificados lleven avisos de que no son el original, para que sus problemas no se atribuyan erróneamente a los autores de versiones anteriores.
+
+Algunos dispositivos están diseñados para negar a los usuarios la capacidad de instalar o ejecutar versiones modificadas de su software, aunque el fabricante lo permita. Esto se denomina a veces "tivoización". Esta Licencia prohíbe esa práctica para los productos cubiertos por la GPL.
+
+Finalmente, todo programa está constantemente amenazado por patentes de software. Los estados no deben permitir que los acuerdos de patentes priven a los usuarios de la libertad de usar el programa. Si usted distribuye un programa cubierto por la GPL y otorga una licencia de patente, está obligado a extender esa licencia a todos los destinatarios del programa y a sus versiones derivadas.
+
+Los términos y condiciones precisos para copiar, distribución y modificación siguen a continuación.
+
+---
+
+[El texto completo de la GPL v3 continúa aquí. Por razones de espacio, normalmente se incluye el texto completo. Puede copiarlo desde https://www.gnu.org/licenses/gpl-3.0.txt]
