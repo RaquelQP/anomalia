@@ -51,7 +51,7 @@ anomalia-v1.2/
 ├── styles/                # Archivos CSS
 ├── icons/                 # Iconos de la extensión
 ├── README.md              # Documentación principal
-├── LICENSE                # Licencia MIT
+├── LICENSE                # Licencia GPL v3
 ├── CONTRIBUTING.md        # Esta guía
 └── privacy-policy.md      # Política de privacidad
 ```
@@ -119,3 +119,7 @@ Algunas ideas para contribuir:
 - **Documentación**: Mejorar README y guías
 
 ¡Gracias por contribuir a hacer la web más segura! 🛡️ 
+
+---
+
+**Nota:** Al contribuir a este proyecto, usted acepta que su código será licenciado bajo la Licencia Pública General GNU v3 (GPL v3). 

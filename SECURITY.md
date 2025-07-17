@@ -6,16 +6,13 @@ Agradecemos que reporte vulnerabilidades de seguridad de forma responsable. Su a
 
 ### Cómo Reportar
 
-**NO** abra un issue público para reportar vulnerabilidades de seguridad.
+**NO** publique detalles de vulnerabilidades de seguridad en issues públicos.
 
-En su lugar, por favor:
+Por favor:
 
-1. **Envíe un email** a [tu-email@ejemplo.com] con el asunto `[SECURITY] Anomalia - Vulnerabilidad`
-2. **Incluya detalles** sobre la vulnerabilidad:
-   - Descripción del problema
-   - Pasos para reproducir
-   - Impacto potencial
-   - Sugerencias de mitigación (si las tiene)
+1. Abra un Issue en GitHub y márquelo como "Security" o "Vulnerabilidad".
+2. No incluya información sensible o detalles técnicos públicos en el issue inicial.
+3. El equipo del proyecto se pondrá en contacto con usted para solicitar detalles adicionales de forma privada si es necesario.
 
 ### Qué Esperar
 
@@ -70,12 +67,11 @@ Para desarrolladores:
 ### Contacto
 
 Para reportar vulnerabilidades de seguridad:
-- Email: [r.querol.p@gmail.com]
-- Asunto: `[SECURITY] Anomalia - Vulnerabilidad`
+- Abra un Issue en GitHub marcado como "Security" o "Vulnerabilidad".
 
 Para preguntas generales sobre seguridad:
-- Abre un issue en GitHub
-- Consulta la documentación del proyecto
+- Abra un issue en GitHub
+- Consulte la documentación del proyecto
 
 ---
 
