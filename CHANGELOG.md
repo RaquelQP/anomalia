@@ -81,3 +81,8 @@ y este proyecto adhiere a [Semantic Versioning](https://semver.org/spec/v2.0.0.h
 ### Corregido
 - Manejo robusto de errores y advertencias en paneles
 - Eliminación de mensajes duplicados en advertencias leves
+
+## [1.3.0] - YYYY-MM-DD
+### Añadido
+- Búsqueda automática y caché de servidores RDAP para TLDs no listados (autocompletado dinámico).
+- Aviso automático en el popup cuando hay una nueva versión disponible en GitHub.

@@ -124,3 +124,34 @@ document.addEventListener('DOMContentLoaded', () => {
     chrome.storage.sync.set({ posicionPanel: positionSelect.value });
   });
 });
+
+// --- NUEVO: Aviso de nueva versión disponible ---
+document.addEventListener('DOMContentLoaded', () => {
+  chrome.storage.sync.get(['nuevaVersionDisponible', 'infoNuevaVersion'], ({ nuevaVersionDisponible, infoNuevaVersion }) => {
+    if (nuevaVersionDisponible && infoNuevaVersion && infoNuevaVersion.version && infoNuevaVersion.url) {
+      mostrarAvisoNuevaVersion(infoNuevaVersion);
+    }
+  });
+});
+
+function mostrarAvisoNuevaVersion(info) {
+  let aviso = document.getElementById('aviso-nueva-version');
+  if (!aviso) {
+    aviso = document.createElement('div');
+    aviso.id = 'aviso-nueva-version';
+    aviso.style.background = '#fff3cd';
+    aviso.style.color = '#856404';
+    aviso.style.border = '1px solid #ffeeba';
+    aviso.style.padding = '10px';
+    aviso.style.marginBottom = '10px';
+    aviso.style.fontWeight = 'bold';
+    aviso.style.textAlign = 'center';
+    aviso.style.position = 'relative';
+    aviso.style.top = '0';
+    aviso.style.left = '0';
+    aviso.style.zIndex = '1000';
+    aviso.innerHTML = `Se encuentra disponible una nueva versión de Anomalia. <a href="${info.url}" target="_blank" style="color:#856404;text-decoration:underline;">Visite este enlace</a> para descargarla.`;
+    const contenedor = document.body || document.documentElement;
+    contenedor.insertBefore(aviso, contenedor.firstChild);
+  }
+}

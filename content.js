@@ -319,6 +319,8 @@ function mostrarPanelLateral(link, contenidoHtml, modoPanel = 'completo') {
 
 // Cache global para resultados RDAP
 const cacheRDAP = {};
+// NUEVO: Cache de promesas para evitar consultas duplicadas por dominio raíz
+const cacheRDAPPromesas = {};
 
 // En analizarEnlaceConRDAP_cacheado, decide si camuflajeTipografico es motivo grave
 async function analizarEnlaceConRDAP_cacheado(href) {
@@ -332,100 +334,106 @@ async function analizarEnlaceConRDAP_cacheado(href) {
   try {
     const url = new URL(href);
     const dominioRaiz = extraerDominioDesdeHref(href);
-    const servidorRDAP = obtenerServidorRDAP(dominioRaiz);
-    if (!servidorRDAP) {
-      motivos.sinServidorRDAP = true;
-      // No se puede consultar RDAP para este TLD
-      return motivos;
-    }
-    if (!cacheRDAP[dominioRaiz]) {
-      cacheRDAP[dominioRaiz] = pruebaRDAP(dominioRaiz);
-    }
-    const { registro, actualizacion, expiracion } = await cacheRDAP[dominioRaiz];
-
-    // Buscar fecha de expiración real en la respuesta RDAP
-    let expiracionReal = null;
-    try {
-      if (expiracion) {
-        expiracionReal = expiracion;
-      }
-      // Si la función pruebaRDAP no devuelve expiracion, busca en los datos crudos
-      if (!expiracionReal && cacheRDAP[dominioRaiz]?._rdapRaw) {
-        const data = cacheRDAP[dominioRaiz]._rdapRaw;
-        if (data.events) {
-          for (const ev of data.events) {
-            if (ev.eventAction === "expiration") expiracionReal = ev.eventDate;
+    // --- NUEVO: Cache de promesas por dominio raíz ---
+    if (!cacheRDAPPromesas[dominioRaiz]) {
+      cacheRDAPPromesas[dominioRaiz] = (async () => {
+        const servidorRDAP = await obtenerServidorRDAP(dominioRaiz);
+        if (!servidorRDAP) {
+          motivos.sinServidorRDAP = true;
+          return motivos;
+        }
+        if (!cacheRDAP[dominioRaiz]) {
+          cacheRDAP[dominioRaiz] = pruebaRDAP(dominioRaiz);
+        }
+        const { registro, actualizacion, expiracion } = await cacheRDAP[dominioRaiz];
+        // Buscar fecha de expiración real en la respuesta RDAP
+        let expiracionReal = null;
+        try {
+          if (expiracion) {
+            expiracionReal = expiracion;
           }
-        }
-        if (!expiracionReal && data.expiresDate) expiracionReal = data.expiresDate;
-        if (!expiracionReal && data.expiryDate) expiracionReal = data.expiryDate;
-        if (!expiracionReal && data.expirationDate) expiracionReal = data.expirationDate;
-      }
-      motivos.fechaExpiracion = expiracionReal || null;
+          // Si la función pruebaRDAP no devuelve expiracion, busca en los datos crudos
+          if (!expiracionReal && cacheRDAP[dominioRaiz]?._rdapRaw) {
+            const data = cacheRDAP[dominioRaiz]._rdapRaw;
+            if (data.events) {
+              for (const ev of data.events) {
+                if (ev.eventAction === "expiration") expiracionReal = ev.eventDate;
+              }
+            }
+            if (!expiracionReal && data.expiresDate) expiracionReal = data.expiresDate;
+            if (!expiracionReal && data.expiryDate) expiracionReal = data.expiryDate;
+            if (!expiracionReal && data.expirationDate) expiracionReal = data.expirationDate;
+          }
+          motivos.fechaExpiracion = expiracionReal || null;
 
-      if (registro) {
-        motivos.fechaRegistro = registro;
-        const fechaRegistro = new Date(registro);
-        const haceUnAño = new Date();
-        haceUnAño.setFullYear(haceUnAño.getFullYear() - 1);
-        if (fechaRegistro > haceUnAño) {
-          motivos.dominioNuevo = true;
-          console.log(`[Anomalia][DEBUG] Dominio nuevo detectado: ${dominioRaiz}`);
-        }
-      }
-      if (expiracionReal) {
-        const fechaExp = new Date(expiracionReal);
-        if (fechaExp < new Date()) {
-          motivos._dominioCaducadoReal = true; // Dominio caducado confirmado
-          motivos._dominioCaducado = false;    // No estimado, es real
-        } else {
-          motivos._dominioCaducadoReal = false; // Dominio vigente
+          if (registro) {
+            motivos.fechaRegistro = registro;
+            const fechaRegistro = new Date(registro);
+            const haceUnAño = new Date();
+            haceUnAño.setFullYear(haceUnAño.getFullYear() - 1);
+            if (fechaRegistro > haceUnAño) {
+              motivos.dominioNuevo = true;
+              console.log(`[Anomalia][DEBUG] Dominio nuevo detectado: ${dominioRaiz}`);
+            }
+          }
+          if (expiracionReal) {
+            const fechaExp = new Date(expiracionReal);
+            if (fechaExp < new Date()) {
+              motivos._dominioCaducadoReal = true; // Dominio caducado confirmado
+              motivos._dominioCaducado = false;    // No estimado, es real
+            } else {
+              motivos._dominioCaducadoReal = false; // Dominio vigente
+              motivos._dominioCaducado = false;
+            }
+            // Log específico de fecha de expiración
+            console.log(`[Anomalia][RDAP] Dominio: ${dominioRaiz} | Registro: ${motivos.fechaRegistro || 'N/D'} | Renovación: ${motivos.fechaRenovacion || 'N/D'} | Expiración: ${motivos.fechaExpiracion || 'N/D'}`);
+          } else if (actualizacion) {
+            // Solo si NO hay expiración, estimar por fecha de renovación
+            const fechaActualizacion = new Date(actualizacion);
+            const haceUnAño = new Date();
+            haceUnAño.setFullYear(haceUnAño.getFullYear() - 1);
+            motivos._dominioCaducado = fechaActualizacion < haceUnAño;
+            motivos._dominioCaducadoReal = false;
+            if (motivos._dominioCaducado) {
+              console.log(`[Anomalia][DEBUG] Dominio caducado detectado (estimado por renovación): ${dominioRaiz}`);
+            }
+            // Log informativo de fechas
+            console.log(`[Anomalia][RDAP] Dominio: ${dominioRaiz} | Registro: ${motivos.fechaRegistro || 'N/D'} | Renovación: ${motivos.fechaRenovacion || 'N/D'} | Expiración: ${motivos.fechaExpiracion || 'N/D'}`);
+          } else {
+            motivos._dominioCaducado = false;
+            motivos._dominioCaducadoReal = false;
+            // Log informativo de fechas aunque no haya datos
+            console.log(`[Anomalia][RDAP] Dominio: ${dominioRaiz} | Registro: ${motivos.fechaRegistro || 'N/D'} | Renovación: ${motivos.fechaRenovacion || 'N/D'} | Expiración: ${motivos.fechaExpiracion || 'N/D'}`);
+          }
+        } catch (e) {
+          // Si hay error en el análisis de fechas, no marcar caducidad
           motivos._dominioCaducado = false;
+          motivos._dominioCaducadoReal = false;
+          motivos.fechaExpiracion = null;
         }
-        // Log específico de fecha de expiración
-        console.log(`[Anomalia][RDAP] Dominio: ${dominioRaiz} | Registro: ${motivos.fechaRegistro || 'N/D'} | Renovación: ${motivos.fechaRenovacion || 'N/D'} | Expiración: ${motivos.fechaExpiracion || 'N/D'}`);
-      } else if (actualizacion) {
-        // Solo si NO hay expiración, estimar por fecha de renovación
-        const fechaActualizacion = new Date(actualizacion);
-        const haceUnAño = new Date();
-        haceUnAño.setFullYear(haceUnAño.getFullYear() - 1);
-        motivos._dominioCaducado = fechaActualizacion < haceUnAño;
-        motivos._dominioCaducadoReal = false;
-        if (motivos._dominioCaducado) {
-          console.log(`[Anomalia][DEBUG] Dominio caducado detectado (estimado por renovación): ${dominioRaiz}`);
+        if (motivos._hayCamuflaje) {
+          console.log(`[Anomalia][DEBUG] Caracteres de camuflaje detectados en: ${dominioRaiz}`);
         }
-        // Log informativo de fechas
-        console.log(`[Anomalia][RDAP] Dominio: ${dominioRaiz} | Registro: ${motivos.fechaRegistro || 'N/D'} | Renovación: ${motivos.fechaRenovacion || 'N/D'} | Expiración: ${motivos.fechaExpiracion || 'N/D'}`);
-      } else {
-        motivos._dominioCaducado = false;
-        motivos._dominioCaducadoReal = false;
-        // Log informativo de fechas aunque no haya datos
-        console.log(`[Anomalia][RDAP] Dominio: ${dominioRaiz} | Registro: ${motivos.fechaRegistro || 'N/D'} | Renovación: ${motivos.fechaRenovacion || 'N/D'} | Expiración: ${motivos.fechaExpiracion || 'N/D'}`);
-      }
-    } catch (e) {
-      // Si hay error en el análisis de fechas, no marcar caducidad
-      motivos._dominioCaducado = false;
-      motivos._dominioCaducadoReal = false;
-      motivos.fechaExpiracion = null;
-    }
-    if (motivos._hayCamuflaje) {
-      console.log(`[Anomalia][DEBUG] Caracteres de camuflaje detectados en: ${dominioRaiz}`);
-    }
-    if (motivos.parametros) {
-      console.log(`[Anomalia][DEBUG] Parámetros peligrosos detectados en URL: ${href}`);
-    }
-    // Log para usuarios avanzados
-    // (Ya cubierto por los logs anteriores)
-    // console.log(`[Anomalia][RDAP] Dominio: ${dominioRaiz} | Registro: ${motivos.fechaRegistro || 'N/D'} | Renovación: ${motivos.fechaRenovacion || 'N/D'} | Expiración: ${motivos.fechaExpiracion || 'N/D'}`);
+        if (motivos.parametros) {
+          console.log(`[Anomalia][DEBUG] Parámetros peligrosos detectados en URL: ${href}`);
+        }
+        // Log para usuarios avanzados
+        // (Ya cubierto por los logs anteriores)
+        // console.log(`[Anomalia][RDAP] Dominio: ${dominioRaiz} | Registro: ${motivos.fechaRegistro || 'N/D'} | Renovación: ${motivos.fechaRenovacion || 'N/D'} | Expiración: ${motivos.fechaExpiracion || 'N/D'}`);
 
-    // Nueva lógica: camuflajeTipografico solo si hay camuflaje y (dominio nuevo o caducado o redirect)
-    motivos.camuflajeTipografico = Boolean(
-      motivos._hayCamuflaje && (
-        motivos.dominioNuevo || motivos._dominioCaducadoReal || motivos._dominioCaducado || motivos.parametros
-      )
-    );
-    // No eliminar motivos._hayCamuflaje ni motivos._dominioCaducado ni motivos._dominioCaducadoReal aquí
-    // Si quieres limpiar el objeto, hazlo después de aplicar el estilo
+        // Nueva lógica: camuflajeTipografico solo si hay camuflaje y (dominio nuevo o caducado o redirect)
+        motivos.camuflajeTipografico = Boolean(
+          motivos._hayCamuflaje && (
+            motivos.dominioNuevo || motivos._dominioCaducadoReal || motivos._dominioCaducado || motivos.parametros
+          )
+        );
+        // No eliminar motivos._hayCamuflaje ni motivos._dominioCaducado ni motivos._dominioCaducadoReal aquí
+        // Si quieres limpiar el objeto, hazlo después de aplicar el estilo
+        return motivos;
+      })();
+    }
+    // Esperar la promesa y devolver el resultado (motivos)
+    return await cacheRDAPPromesas[dominioRaiz];
   } catch (e) {
     // Si falla la consulta RDAP, no se marcan los motivos
   }
@@ -634,18 +642,94 @@ const servidoresRDAP = {
   'site': 'https://rdap.centralnic.com/site/domain/',
   'store': 'https://rdap.centralnic.com/store/domain/',
   'it': 'https://rdap.nic.it/domain/', // Añadido TLD .it
+  'cat': 'https://rdap.nic.cat/domain/',
   // Puede añadir más TLDs según necesidad
 };
 
-function obtenerServidorRDAP(dominio) {
+// --- NUEVO: Autocompletado dinámico de servidores RDAP con control de concurrencia y caché ---
+const rdapPendingFetches = {};
+async function obtenerServidorRDAP(dominio) {
   const partes = dominio.split('.');
   const tld = partes[partes.length - 1];
-  return servidoresRDAP[tld] || null;
+
+  // 1. Buscar en memoria
+  if (servidoresRDAP[tld]) return servidoresRDAP[tld];
+
+  // 2. Control de concurrencia: si ya hay una petición en curso para este TLD, espera a que termine
+  if (rdapPendingFetches[tld]) {
+    return await rdapPendingFetches[tld];
+  }
+
+  // 3. Buscar en chrome.storage.local (persistente por usuario)
+  const storageKey = 'servidoresRDAP_dynamic';
+  let dynamicList = {};
+  try {
+    dynamicList = (await new Promise(resolve => {
+      chrome.storage.local.get([storageKey], res => resolve(res[storageKey] || {}));
+    })) || {};
+    if (dynamicList[tld]) {
+      servidoresRDAP[tld] = dynamicList[tld]; // Añadir a memoria para esta sesión
+      return dynamicList[tld];
+    }
+  } catch {}
+
+  // 4. Consultar la IANA si no está
+  rdapPendingFetches[tld] = (async () => {
+    try {
+      const resp = await fetch('https://data.iana.org/rdap/dns.json');
+      if (resp.ok) {
+        let data = null;
+        try {
+          data = await resp.json();
+        } catch (e) {
+          console.error(`[Anomalia][RDAP] Error parseando JSON de IANA para .${tld}:`, e);
+          return null;
+        }
+        // CORREGIDO: Buscar el TLD exactamente en el array de servicios
+        let service = null;
+        try {
+          service = (data.services || []).find(arr => arr[0].some(name => name === tld));
+        } catch (e) {
+          console.error(`[Anomalia][RDAP] Error buscando TLD en servicios de IANA para .${tld}:`, e);
+          return null;
+        }
+        if (service && service[1] && service[1][0]) {
+          const url = service[1][0].replace(/\/$/, '') + '/domain/';
+          // Añadir a memoria inmediatamente
+          servidoresRDAP[tld] = url;
+          // Guardar en chrome.storage.local (no esperamos a que termine para devolver la URL)
+          dynamicList[tld] = url;
+          chrome.storage.local.set({ [storageKey]: dynamicList });
+          // Sugerir línea para desarrollador (solo si no se ha sugerido antes)
+          if (!servidoresRDAP._sugeridos) servidoresRDAP._sugeridos = {};
+          if (!servidoresRDAP._sugeridos[tld]) {
+            console.log(`[Anomalia][RDAP] Nuevo TLD detectado: añada esta línea a servidoresRDAP para hacerlo permanente:`);
+            console.log(`  '${tld}': '${url}',`);
+            servidoresRDAP._sugeridos[tld] = true;
+          }
+          return url;
+        } else {
+          console.warn(`[Anomalia][RDAP] No se encontró servidor RDAP para .${tld} en la respuesta de IANA.`);
+          return null;
+        }
+      } else {
+        console.error(`[Anomalia][RDAP] Error al consultar IANA para .${tld}:`, resp.status, resp.statusText);
+        return null;
+      }
+    } catch (e) {
+      console.error(`[Anomalia][RDAP] Error de red o parseo al consultar IANA para .${tld}:`, e);
+      return null;
+    }
+  })();
+
+  const result = await rdapPendingFetches[tld];
+  delete rdapPendingFetches[tld];
+  return result;
 }
 
 // Refuerzo la función pruebaRDAP para que nunca lance errores ni deje excepciones sin capturar
 async function pruebaRDAP(dominio) {
-  const base = obtenerServidorRDAP(dominio);
+  const base = await obtenerServidorRDAP(dominio);
   if (!base) {
     // No hay servidor para este TLD, no es un error
     return { registro: null, actualizacion: null, expiracion: null, _rdapRaw: null };
