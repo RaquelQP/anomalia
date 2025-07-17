@@ -104,3 +104,51 @@ chrome.storage.onChanged.addListener((changes, namespace) => {
     });
   }
 });
+
+// --- NUEVO: Comprobación de nueva versión en GitHub al iniciar ---
+const GITHUB_API_URL = 'https://api.github.com/repos/RaquelQP/anomalia/releases/latest';
+const RELEASES_URL = 'https://github.com/RaquelQP/anomalia/releases';
+
+async function comprobarNuevaVersion() {
+  try {
+    const resp = await fetch(GITHUB_API_URL);
+    if (!resp.ok) return;
+    const data = await resp.json();
+    const ultimaVersion = (data.tag_name || data.name || '').replace(/^v/, '');
+    const versionLocal = chrome.runtime.getManifest().version;
+    if (ultimaVersion && compararVersiones(ultimaVersion, versionLocal) > 0) {
+      chrome.storage.sync.set({
+        nuevaVersionDisponible: true,
+        infoNuevaVersion: {
+          version: ultimaVersion,
+          url: RELEASES_URL
+        }
+      });
+    } else {
+      chrome.storage.sync.set({ nuevaVersionDisponible: false });
+    }
+  } catch (e) {
+    // Silenciar errores de red
+  }
+}
+
+// Compara dos strings de versión tipo '1.2.3'. Devuelve 1 si a > b, -1 si a < b, 0 si igual
+function compararVersiones(a, b) {
+  const pa = a.split('.').map(Number);
+  const pb = b.split('.').map(Number);
+  for (let i = 0; i < Math.max(pa.length, pb.length); i++) {
+    const na = pa[i] || 0, nb = pb[i] || 0;
+    if (na > nb) return 1;
+    if (na < nb) return -1;
+  }
+  return 0;
+}
+
+chrome.runtime.onStartup.addListener(() => {
+  comprobarNuevaVersion();
+});
+
+// También al instalar/actualizar
+chrome.runtime.onInstalled.addListener(() => {
+  comprobarNuevaVersion();
+});

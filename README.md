@@ -18,6 +18,8 @@ Una extensión de Chrome que protege su seguridad en Gmail y Outlook detectando 
 - **Análisis de datos registrales (RDAP)**: Consulta y analiza registro, renovación y expiración de dominios para los TLDs más populares (.com, .net, .org, .es, .io, .ai, .co, .it, etc.)
 - **Panel informativo con emojis**: Mensajes claros y diferenciados por nivel de riesgo con 🚫 (peligro) y ⚠️ (precaución)
 - **Advertencia leve**: Si no se pueden obtener datos registrales o el TLD no está soportado
+- **Búsqueda automática de servidores RDAP**: Si un TLD no está en la lista, la extensión lo busca automáticamente y lo recuerda para el usuario.
+- **Aviso de nueva versión**: El popup muestra un aviso si hay una nueva versión disponible en GitHub.
 
 ## 🎯 Compatibilidad
 
@@ -94,8 +96,10 @@ Para reportar vulnerabilidades de seguridad, consulte nuestra [Política de Segu
 
 Ver [CHANGELOG.md](CHANGELOG.md) para un historial completo de cambios. 
 
-## 🆕 Novedades en la versión 1.2.0
+## 🆕 Novedades en la versión 1.3.0
 
+- Búsqueda automática y caché de servidores RDAP para TLDs no listados
+- Aviso automático en el popup cuando hay una nueva versión disponible en GitHub
 - Detección automática y no configurable de camuflaje tipográfico
 - Panel informativo con mensajes claros y diferenciados por nivel de riesgo
 - Uso de emojis 🚫 y ⚠️ para distinguir entre peligro y precaución
