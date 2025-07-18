@@ -1,5 +1,4 @@
-// Log para depuración: ver en qué páginas se inyecta el content script
-console.log('[Anomalia] Content script cargado en:', window.location.href);
+console.log('[Anomalia][DEBUG] content.js PRUEBA UNICA 2024-06-20');
 
 let opcionesCargadas = {};
 
@@ -47,7 +46,9 @@ function evaluarMotivosDeAlerta(href) {
     acortador: false,
     ip: false,
     credenciales: false,
-    parametros: false,
+    parametrosSospechosos: false, // Nuevo: solo si hay parámetros sospechosos
+    rutaSospechosa: false,        // Nuevo: solo si el path es sospechoso
+    parametros: false,            // Compatibilidad: true si cualquiera de los dos
     homoglifos: false,
     camuflajeTipografico: false, // Nuevo motivo grave
     dominioNuevo: false,
@@ -56,10 +57,15 @@ function evaluarMotivosDeAlerta(href) {
     fechaExpiracion: null
   };
 
+  let url = null;
   try {
-    const url = new URL(href);
+    url = new URL(href);
+  } catch {
+    // Si no se puede parsear la URL, devuelve motivos por defecto
+    return motivos;
+  }
+  if (url) {
     const host = url.hostname;
-
     // ——— 1. ALFABETOS UNICODE ———
     const bloques = {
       'Cirílico': [0x0400, 0x04FF],
@@ -81,7 +87,6 @@ function evaluarMotivosDeAlerta(href) {
         }
       }
     }
-
     // ——— 2. ACORTADOR ———
     const acortadores = [
       'bit.ly', 't.co', 'goo.gl', 'tinyurl.com',
@@ -91,19 +96,16 @@ function evaluarMotivosDeAlerta(href) {
       'short.io', 'bl.ink', 'cli.re', 'lnnk.in'
     ];
     motivos.acortador = acortadores.includes(host);
-
     // ——— 3. IP ———
     motivos.ip = /^(?:\d{1,3}\.){3}\d{1,3}$/.test(host);
-
     // ——— 4. CREDENCIALES ———
     motivos.credenciales = !!(url.username || url.password);
-
     // ——— 5. PARÁMETROS SOSPECHOSOS ———
     const sospechosos = ['redirect', 'url', 'next', 'continue', 'target'];
-    motivos.parametros = [...url.searchParams.keys()]
-      .map(k => k.toLowerCase())
-      .some(k => sospechosos.includes(k));
-
+    const params = [...url.searchParams.keys()].map(k => k.toLowerCase());
+    motivos.parametrosSospechosos = params.some(k => sospechosos.includes(k));
+    motivos.rutaSospechosa = sospechosos.some(sos => url.pathname.toLowerCase().includes(sos));
+    motivos.parametros = motivos.parametrosSospechosos || motivos.rutaSospechosa; // Para compatibilidad
     // ——— 6. HOMOGLIFOS ———
     const homoglifos = [
       0x2010, 0x3164, 0x202E, 0x200B, 0x2066, 0x2067, 0x2068, 0x2069,
@@ -115,17 +117,13 @@ function evaluarMotivosDeAlerta(href) {
         break;
       }
     }
-
     // ——— 7. CAMUFLAJE TIPOGRÁFICO (solo se decide tras RDAP) ———
     motivos._hayCamuflaje = patronesCamuflaje.some(p => p.test(host));
-  } catch {
-    // Si no se puede parsear la URL, no se evalúa
   }
-
   return motivos;
 }
 
-// En generarMensajesExplicativos, muestra si la caducidad es real o estimada
+// En generarMensajesExplicativos, mostrar camuflaje tipográfico solo como información si existe junto a dominioNuevo
 function generarMensajesExplicativos(motivos) {
   const mensajes = [];
   // 🚫 Prohibición
@@ -140,10 +138,13 @@ function generarMensajesExplicativos(motivos) {
   // ⚠️ Precaución
   if (motivos.acortador)
     mensajes.push('⚠️ El destino real está oculto tras un acortador');
-  if (motivos.parametros)
-    mensajes.push('⚠️ Puede redirigir tras hacer clic');
-  if (motivos._hayCamuflaje)
-    mensajes.push('⚠️ El dominio contiene caracteres ambiguos (posible camuflaje tipográfico)');
+  if (motivos.parametrosSospechosos)
+    mensajes.push('⚠️ Puede redirigir tras hacer clic (parámetro sospechoso)');
+  if (motivos.rutaSospechosa)
+    mensajes.push('⚠️ Puede redirigir tras hacer clic (ruta sospechosa)');
+  // Mostrar camuflaje tipográfico solo si existe junto a dominioNuevo
+  if (motivos.camuflajeTipografico && motivos.dominioNuevo)
+    mensajes.push('⚠️ El dominio es nuevo y contiene caracteres ambiguos (posible camuflaje tipográfico)');
   // Sin emoji
   if (motivos.dominioNuevo)
     mensajes.push('⚠️ El dominio es muy reciente (menos de un año desde su registro)');
@@ -162,7 +163,13 @@ function generarMensajesExplicativos(motivos) {
 
 // Modificar formatearPanelHtml para mostrar los elementos en el orden solicitado y mostrar fechas
 function formatearPanelHtml(href, dominioRaiz, mensajes, motivos) {
+  // Truncar la URL si es demasiado larga
+  const MAX_URL_LENGTH = 120;
   const urlLegible = decodeURIComponent(href);
+  let urlMostrada = urlLegible;
+  if (urlLegible.length > MAX_URL_LENGTH) {
+    urlMostrada = urlLegible.slice(0, MAX_URL_LENGTH - 3) + '...';
+  }
   const dominioLegible = dominioRaiz
     ? dominioRaiz.toUpperCase()
     : '<span style="color:#e74c3c;">ILEGIBLE</span>';
@@ -187,7 +194,7 @@ function formatearPanelHtml(href, dominioRaiz, mensajes, motivos) {
     `<strong>Renovación:</strong> ${fechaRenovacion}<br>` +
     `<strong>Expiración:</strong> ${fechaExpiracion}<br>` +
     `<strong>Alerta:</strong> ${cuerpoAlertas}` +
-    `<strong>URL:</strong> ${urlLegible}<br>`
+    `<strong>URL:</strong> <span title="${urlLegible}">${urlMostrada}</span><br>`
   );
 }
 
@@ -201,12 +208,11 @@ function esMotivoGrave(motivos) {
     motivos.acortador ||
     motivos.ip ||
     motivos.credenciales ||
-    motivos.parametros ||
+    motivos.parametrosSospechosos ||
+    motivos.rutaSospechosa ||
     motivos.homoglifos ||
     motivos.dominioNuevo ||
-    motivos._dominioCaducadoReal ||
-    motivos._dominioCaducado ||
-    motivos.camuflajeTipografico // Motivo grave solo si hay camuflaje y (caducidad, dominio nuevo o redirect)
+    motivos._dominioCaducadoReal
   );
 }
 
@@ -315,8 +321,6 @@ function mostrarPanelLateral(link, contenidoHtml, modoPanel = 'completo') {
   });
 }
 
-
-
 // Cache global para resultados RDAP
 const cacheRDAP = {};
 // NUEVO: Cache de promesas para evitar consultas duplicadas por dominio raíz
@@ -324,12 +328,14 @@ const cacheRDAPPromesas = {};
 
 // En analizarEnlaceConRDAP_cacheado, decide si camuflajeTipografico es motivo grave
 async function analizarEnlaceConRDAP_cacheado(href) {
-  const motivos = evaluarMotivosDeAlerta(href);
-  motivos.dominioNuevo = false;
-  motivos.fechaRegistro = null;
-  motivos.fechaRenovacion = null;
-  motivos.fechaExpiracion = null; // Resetear para cada llamada
-  motivos.sinServidorRDAP = false; // Nuevo flag
+  // Motivos dependientes de la URL completa (no cacheables por dominio raíz)
+  const motivosURL = evaluarMotivosDeAlerta(href);
+  // Inicializar campos RDAP (se sobrescribirán si hay datos)
+  motivosURL.dominioNuevo = false;
+  motivosURL.fechaRegistro = null;
+  motivosURL.fechaRenovacion = null;
+  motivosURL.fechaExpiracion = null;
+  motivosURL.sinServidorRDAP = false;
 
   try {
     const url = new URL(href);
@@ -339,20 +345,26 @@ async function analizarEnlaceConRDAP_cacheado(href) {
       cacheRDAPPromesas[dominioRaiz] = (async () => {
         const servidorRDAP = await obtenerServidorRDAP(dominioRaiz);
         if (!servidorRDAP) {
-          motivos.sinServidorRDAP = true;
-          return motivos;
+          // Solo campos RDAP, no tocar motivosURL
+          return {
+            fechaRegistro: null,
+            fechaRenovacion: null,
+            fechaExpiracion: null,
+            dominioNuevo: false,
+            sinServidorRDAP: true,
+            _dominioCaducado: false,
+            _dominioCaducadoReal: false
+          };
         }
         if (!cacheRDAP[dominioRaiz]) {
           cacheRDAP[dominioRaiz] = pruebaRDAP(dominioRaiz);
         }
         const { registro, actualizacion, expiracion } = await cacheRDAP[dominioRaiz];
-        // Buscar fecha de expiración real en la respuesta RDAP
         let expiracionReal = null;
         try {
           if (expiracion) {
             expiracionReal = expiracion;
           }
-          // Si la función pruebaRDAP no devuelve expiracion, busca en los datos crudos
           if (!expiracionReal && cacheRDAP[dominioRaiz]?._rdapRaw) {
             const data = cacheRDAP[dominioRaiz]._rdapRaw;
             if (data.events) {
@@ -364,90 +376,89 @@ async function analizarEnlaceConRDAP_cacheado(href) {
             if (!expiracionReal && data.expiryDate) expiracionReal = data.expiryDate;
             if (!expiracionReal && data.expirationDate) expiracionReal = data.expirationDate;
           }
-          motivos.fechaExpiracion = expiracionReal || null;
-
+          // Solo campos RDAP
+          const resultado = {
+            fechaRegistro: registro || null,
+            fechaRenovacion: actualizacion || null,
+            fechaExpiracion: expiracionReal || null,
+            dominioNuevo: false,
+            sinServidorRDAP: false,
+            _dominioCaducado: false,
+            _dominioCaducadoReal: false
+          };
           if (registro) {
-            motivos.fechaRegistro = registro;
             const fechaRegistro = new Date(registro);
             const haceUnAño = new Date();
             haceUnAño.setFullYear(haceUnAño.getFullYear() - 1);
             if (fechaRegistro > haceUnAño) {
-              motivos.dominioNuevo = true;
-              console.log(`[Anomalia][DEBUG] Dominio nuevo detectado: ${dominioRaiz}`);
+              resultado.dominioNuevo = true;
             }
           }
           if (expiracionReal) {
             const fechaExp = new Date(expiracionReal);
             if (fechaExp < new Date()) {
-              motivos._dominioCaducadoReal = true; // Dominio caducado confirmado
-              motivos._dominioCaducado = false;    // No estimado, es real
+              resultado._dominioCaducadoReal = true;
+              resultado._dominioCaducado = false;
             } else {
-              motivos._dominioCaducadoReal = false; // Dominio vigente
-              motivos._dominioCaducado = false;
+              resultado._dominioCaducadoReal = false;
+              resultado._dominioCaducado = false;
             }
-            // Log específico de fecha de expiración
-            console.log(`[Anomalia][RDAP] Dominio: ${dominioRaiz} | Registro: ${motivos.fechaRegistro || 'N/D'} | Renovación: ${motivos.fechaRenovacion || 'N/D'} | Expiración: ${motivos.fechaExpiracion || 'N/D'}`);
           } else if (actualizacion) {
-            // Solo si NO hay expiración, estimar por fecha de renovación
             const fechaActualizacion = new Date(actualizacion);
             const haceUnAño = new Date();
             haceUnAño.setFullYear(haceUnAño.getFullYear() - 1);
-            motivos._dominioCaducado = fechaActualizacion < haceUnAño;
-            motivos._dominioCaducadoReal = false;
-            if (motivos._dominioCaducado) {
-              console.log(`[Anomalia][DEBUG] Dominio caducado detectado (estimado por renovación): ${dominioRaiz}`);
-            }
-            // Log informativo de fechas
-            console.log(`[Anomalia][RDAP] Dominio: ${dominioRaiz} | Registro: ${motivos.fechaRegistro || 'N/D'} | Renovación: ${motivos.fechaRenovacion || 'N/D'} | Expiración: ${motivos.fechaExpiracion || 'N/D'}`);
-          } else {
-            motivos._dominioCaducado = false;
-            motivos._dominioCaducadoReal = false;
-            // Log informativo de fechas aunque no haya datos
-            console.log(`[Anomalia][RDAP] Dominio: ${dominioRaiz} | Registro: ${motivos.fechaRegistro || 'N/D'} | Renovación: ${motivos.fechaRenovacion || 'N/D'} | Expiración: ${motivos.fechaExpiracion || 'N/D'}`);
+            resultado._dominioCaducado = fechaActualizacion < haceUnAño;
+            resultado._dominioCaducadoReal = false;
           }
+          return resultado;
         } catch (e) {
-          // Si hay error en el análisis de fechas, no marcar caducidad
-          motivos._dominioCaducado = false;
-          motivos._dominioCaducadoReal = false;
-          motivos.fechaExpiracion = null;
+          return {
+            fechaRegistro: null,
+            fechaRenovacion: null,
+            fechaExpiracion: null,
+            dominioNuevo: false,
+            sinServidorRDAP: false,
+            _dominioCaducado: false,
+            _dominioCaducadoReal: false
+          };
         }
-        if (motivos._hayCamuflaje) {
-          console.log(`[Anomalia][DEBUG] Caracteres de camuflaje detectados en: ${dominioRaiz}`);
-        }
-        if (motivos.parametros) {
-          console.log(`[Anomalia][DEBUG] Parámetros peligrosos detectados en URL: ${href}`);
-        }
-        // Log para usuarios avanzados
-        // (Ya cubierto por los logs anteriores)
-        // console.log(`[Anomalia][RDAP] Dominio: ${dominioRaiz} | Registro: ${motivos.fechaRegistro || 'N/D'} | Renovación: ${motivos.fechaRenovacion || 'N/D'} | Expiración: ${motivos.fechaExpiracion || 'N/D'}`);
-
-        // Nueva lógica: camuflajeTipografico solo si hay camuflaje y (dominio nuevo o caducado o redirect)
-        motivos.camuflajeTipografico = Boolean(
-          motivos._hayCamuflaje && (
-            motivos.dominioNuevo || motivos._dominioCaducadoReal || motivos._dominioCaducado || motivos.parametros
-          )
-        );
-        // No eliminar motivos._hayCamuflaje ni motivos._dominioCaducado ni motivos._dominioCaducadoReal aquí
-        // Si quieres limpiar el objeto, hazlo después de aplicar el estilo
-        return motivos;
       })();
     }
-    // Esperar la promesa y devolver el resultado (motivos)
-    return await cacheRDAPPromesas[dominioRaiz];
+    // Esperar la promesa y fusionar motivos RDAP con motivosURL
+    const motivosRDAP = await cacheRDAPPromesas[dominioRaiz];
+    // Fusionar: los campos de motivosRDAP sobrescriben los de motivosURL solo en los campos RDAP
+    const motivosFinal = {
+      ...motivosURL,
+      ...motivosRDAP
+    };
+    // Recalcular camuflajeTipografico con los motivos fusionados
+    motivosFinal.camuflajeTipografico = Boolean(
+      motivosFinal._hayCamuflaje && (
+        motivosFinal.dominioNuevo || motivosFinal._dominioCaducadoReal || motivosFinal._dominioCaducado || motivosFinal.parametros
+      )
+    );
+    return motivosFinal;
   } catch (e) {
-    // Si falla la consulta RDAP, no se marcan los motivos
+    // Si falla la consulta RDAP, devolver motivosURL
+    return motivosURL;
   }
-  return motivos;
 }
 
+let procesandoEnlaces = false;
+
 function procesarEnlaces(forzar = false) {
+  if (procesandoEnlaces) return;
+  procesandoEnlaces = true;
+
   if (opcionesCargadas?.extensionActiva === false) {
+    procesandoEnlaces = false;
     return;
   }
 
   const zona = obtenerZonaMensajes();
 
   if (!zona) {
+    procesandoEnlaces = false;
     return;
   }
 
@@ -457,11 +468,9 @@ function procesarEnlaces(forzar = false) {
     const href = enlace.getAttribute('href');
     const mostrarDominio = opcionesCargadas?.mostrarDominioSimple === true;
 
-    if (!forzar && enlace.dataset.enlaceProcesado === 'true') {
-      return;
-    }
-
-    enlace.dataset.enlaceProcesado = 'true';
+    // Evitar reprocesar enlaces ya analizados
+    if (enlace.getAttribute('data-anomalia-procesado') === 'true') return;
+    enlace.setAttribute('data-anomalia-procesado', 'true');
 
     // Estilo provisional mientras se analiza
     enlace.style.outline = '2px dashed #aaa';
@@ -477,7 +486,6 @@ function procesarEnlaces(forzar = false) {
       const advertenciaLeve = (
         (!motivos.fechaRegistro && !motivos.fechaExpiracion) || motivos.sinServidorRDAP
       );
-      // const tieneCamuflaje = motivos.camuflaje === true; // Ya no es necesario
 
       let modoPanel = null;
 
@@ -498,6 +506,8 @@ function procesarEnlaces(forzar = false) {
       }
     });
   });
+
+  procesandoEnlaces = false;
 }
 
 function obtenerZonaMensajes() {
@@ -582,7 +592,16 @@ const bodyObserver = new MutationObserver(() => {
 
   if (mensajeObserver) mensajeObserver.disconnect();
 
-  mensajeObserver = new MutationObserver(() => {
+  mensajeObserver = new MutationObserver(mutations => {
+    // Filtra los cambios: ignora los que afectan solo a nodos de la extensión
+    const relevante = mutations.some(mutation =>
+      Array.from(mutation.addedNodes).some(node =>
+        !(node.nodeType === 1 && (node.classList?.contains('panel-entero') || node.classList?.contains('panel-reducido')))
+      )
+    );
+    if (!relevante) return; // Si solo son paneles, no reproceses
+
+    mensajeObserver.disconnect();
     chrome.storage.sync.get(clavesOpciones, opciones => {
       opcionesCargadas = opciones;
 
@@ -590,8 +609,53 @@ const bodyObserver = new MutationObserver(() => {
         return;
       }
 
-      procesarEnlaces(true); // Forzar reanálisis completo
-      chrome.runtime.sendMessage({ tipo: 'actualizarIcono' });
+      // Procesar todos los enlaces y esperar a que terminen
+      const zona = obtenerZonaMensajes();
+      if (!zona) return;
+      const enlaces = zona.querySelectorAll('a[href]');
+      const promesas = [];
+      enlaces.forEach((enlace, i) => {
+        const href = enlace.getAttribute('href');
+        const mostrarDominio = opcionesCargadas?.mostrarDominioSimple === true;
+
+        // Evitar reprocesar enlaces ya analizados
+        if (enlace.getAttribute('data-anomalia-procesado') === 'true') return;
+        enlace.setAttribute('data-anomalia-procesado', 'true');
+
+        // Estilo provisional mientras se analiza
+        enlace.style.outline = '2px dashed #aaa';
+        enlace.title = 'Analizando dominio...';
+
+        promesas.push(analizarEnlaceConRDAP_cacheado(href).then(motivos => {
+          // Quitar estilo provisional
+          enlace.style.outline = '';
+          enlace.title = '';
+          const tieneMotivosGraves = esMotivoGrave(motivos);
+          // Detectar advertencia leve (falta de datos registrales o TLD no soportado)
+          const advertenciaLeve = (
+            (!motivos.fechaRegistro && !motivos.fechaExpiracion) || motivos.sinServidorRDAP
+          );
+          let modoPanel = null;
+          if (tieneMotivosGraves) {
+            modoPanel = 'completo';
+          } else if (advertenciaLeve) {
+            modoPanel = 'leve'; // Nuevo modo para advertencia leve
+          } else if (mostrarDominio) {
+            modoPanel = 'soloDominio';
+          } else {
+            limpiarEstilosEnlace(enlace);
+          }
+          if (modoPanel) {
+            aplicarEstilo(enlace, href, opcionesCargadas?.color, motivos, modoPanel);
+          } else {
+            limpiarEstilosEnlace(enlace);
+          }
+        }));
+      });
+      Promise.all(promesas).then(() => {
+        // Volver a observar después de procesar TODO
+        mensajeObserver.observe(zona, { childList: true, subtree: true });
+      });
     });
   });
 
@@ -682,15 +746,15 @@ async function obtenerServidorRDAP(dominio) {
         try {
           data = await resp.json();
         } catch (e) {
-          console.error(`[Anomalia][RDAP] Error parseando JSON de IANA para .${tld}:`, e);
+          console.error('[Anomalia][RDAP] Error parseando JSON de IANA para .' + tld + ':', e);
           return null;
         }
-        // CORREGIDO: Buscar el TLD exactamente en el array de servicios
+        // Buscar el TLD exactamente en el array de servicios
         let service = null;
         try {
           service = (data.services || []).find(arr => arr[0].some(name => name === tld));
         } catch (e) {
-          console.error(`[Anomalia][RDAP] Error buscando TLD en servicios de IANA para .${tld}:`, e);
+          console.error('[Anomalia][RDAP] Error buscando TLD en servicios de IANA para .' + tld + ':', e);
           return null;
         }
         if (service && service[1] && service[1][0]) {
@@ -709,15 +773,21 @@ async function obtenerServidorRDAP(dominio) {
           }
           return url;
         } else {
-          console.warn(`[Anomalia][RDAP] No se encontró servidor RDAP para .${tld} en la respuesta de IANA.`);
+          // Solo mostrar advertencia si estamos en entorno de desarrollo (localhost o file: o flag global)
+          if (typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.protocol === 'file:') ) {
+            console.warn('[Anomalia][RDAP] No se encontró servidor RDAP para .' + tld + ' en la respuesta de IANA.');
+          } else if (typeof process !== 'undefined' && process.env && process.env.NODE_ENV === 'development') {
+            // Para entornos Node de desarrollo
+            console.warn('[Anomalia][RDAP] No se encontró servidor RDAP para .' + tld + ' en la respuesta de IANA.');
+          } // En producción, no mostrar advertencia
           return null;
         }
       } else {
-        console.error(`[Anomalia][RDAP] Error al consultar IANA para .${tld}:`, resp.status, resp.statusText);
+        console.error('[Anomalia][RDAP] Error al consultar IANA para .' + tld + ':', resp.status, resp.statusText);
         return null;
       }
     } catch (e) {
-      console.error(`[Anomalia][RDAP] Error de red o parseo al consultar IANA para .${tld}:`, e);
+      console.error('[Anomalia][RDAP] Error de red o parseo al consultar IANA para .' + tld + ':', e);
       return null;
     }
   })();

@@ -82,6 +82,21 @@ y este proyecto adhiere a [Semantic Versioning](https://semver.org/spec/v2.0.0.h
 - Manejo robusto de errores y advertencias en paneles
 - Eliminación de mensajes duplicados en advertencias leves
 
+## [1.3.0] - 2024-06-21
+### Mejoras y cambios
+- Separación de motivos de alerta para parámetros y ruta sospechosa.
+- Robustez en la detección de motivos de alerta, incluso con caché RDAP.
+- Truncado automático de URLs largas en el panel para evitar desbordes.
+- Limpieza de logs de depuración y advertencias en consola.
+- Mejor gestión de advertencias RDAP solo en desarrollo.
+- Mejoras menores de compatibilidad y experiencia de usuario.
+
+## [1.3.1] - 2024-06-21
+### Cambios menores
+- Truncado automático de URLs largas en el panel para evitar desbordes.
+- Mejor robustez en la gestión de motivos de alerta.
+- Mejoras visuales y de experiencia de usuario.
+
 ## [1.3.0] - YYYY-MM-DD
 ### Añadido
 - Búsqueda automática y caché de servidores RDAP para TLDs no listados (autocompletado dinámico).

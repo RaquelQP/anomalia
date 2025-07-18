@@ -96,21 +96,12 @@ Para reportar vulnerabilidades de seguridad, consulte nuestra [Política de Segu
 
 Ver [CHANGELOG.md](CHANGELOG.md) para un historial completo de cambios. 
 
-## 🆕 Novedades en la versión 1.3.0
+## Versión
 
-- Búsqueda automática y caché de servidores RDAP para TLDs no listados
-- Aviso automático en el popup cuando hay una nueva versión disponible en GitHub
-- Detección automática y no configurable de camuflaje tipográfico
-- Panel informativo con mensajes claros y diferenciados por nivel de riesgo
-- Uso de emojis 🚫 y ⚠️ para distinguir entre peligro y precaución
-- Advertencia leve cuando no se pueden obtener datos registrales o el TLD no está soportado
-- Análisis de datos registrales (registro, renovación, expiración) de dominios mediante RDAP para los TLDs más populares
-- Sección de ayuda completamente actualizada y adaptada a todos los cambios
-- Aviso para usuarios avanzados sobre consulta de datos en la consola
-- Limpieza de opciones y simplificación de la interfaz
-- Reducción de falsos positivos y experiencia visual más limpia
-- Compatibilidad confirmada con Chrome, Edge y Brave
-- Eliminados permisos innecesarios y recursos web accesibles no requeridos
-- Manejo robusto de errores y advertencias en paneles
-- Eliminación de mensajes duplicados en advertencias leves
-- Coherencia en el trato formal en toda la extensión 
+**1.3.1** (21 de junio de 2024)
+
+### Cambios menores
+- Truncado automático de URLs largas en el panel para evitar desbordes.
+- Limpieza de logs de depuración y advertencias en consola.
+- Mejor robustez en la gestión de motivos de alerta.
+- Mejoras visuales y de experiencia de usuario. 
