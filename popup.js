@@ -127,7 +127,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // --- NUEVO: Aviso de nueva versión disponible ---
 document.addEventListener('DOMContentLoaded', () => {
+  console.log('Popup cargado, comprobando nueva versión...');
   chrome.storage.sync.get(['nuevaVersionDisponible', 'infoNuevaVersion'], ({ nuevaVersionDisponible, infoNuevaVersion }) => {
+    console.log('Valores leídos:', nuevaVersionDisponible, infoNuevaVersion);
     if (nuevaVersionDisponible && infoNuevaVersion && infoNuevaVersion.version && infoNuevaVersion.url) {
       mostrarAvisoNuevaVersion(infoNuevaVersion);
     }
@@ -135,23 +137,25 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function mostrarAvisoNuevaVersion(info) {
+  console.log('Mostrando aviso de nueva versión:', info);
   let aviso = document.getElementById('aviso-nueva-version');
   if (!aviso) {
     aviso = document.createElement('div');
     aviso.id = 'aviso-nueva-version';
-    aviso.style.background = '#fff3cd';
-    aviso.style.color = '#856404';
-    aviso.style.border = '1px solid #ffeeba';
-    aviso.style.padding = '10px';
-    aviso.style.marginBottom = '10px';
-    aviso.style.fontWeight = 'bold';
-    aviso.style.textAlign = 'center';
-    aviso.style.position = 'relative';
-    aviso.style.top = '0';
-    aviso.style.left = '0';
-    aviso.style.zIndex = '1000';
-    aviso.innerHTML = `Se encuentra disponible una nueva versión de Anomalia. <a href="${info.url}" target="_blank" style="color:#856404;text-decoration:underline;">Visite este enlace</a> para descargarla.`;
     const contenedor = document.body || document.documentElement;
     contenedor.insertBefore(aviso, contenedor.firstChild);
   }
+  // Siempre poner estilos y contenido, exista o no el div
+  aviso.style.background = '#fff3cd';
+  aviso.style.color = '#856404';
+  aviso.style.border = '1px solid #ffeeba';
+  aviso.style.padding = '10px';
+  aviso.style.marginBottom = '10px';
+  aviso.style.fontWeight = 'bold';
+  aviso.style.textAlign = 'center';
+  aviso.style.position = 'relative';
+  aviso.style.top = '0';
+  aviso.style.left = '0';
+  aviso.style.zIndex = '1000';
+  aviso.innerHTML = `Se encuentra disponible una nueva versión de Anomalia. <a href="${info.url}" target="_blank" style="color:#856404;text-decoration:underline;">Visite este enlace</a> para descargarla.`;
 }
