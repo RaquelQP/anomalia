@@ -91,11 +91,24 @@ y este proyecto adhiere a [Semantic Versioning](https://semver.org/spec/v2.0.0.h
 - Mejor gestión de advertencias RDAP solo en desarrollo.
 - Mejoras menores de compatibilidad y experiencia de usuario.
 
-## [1.3.1] - 2024-06-21
-### Cambios menores
-- Truncado automático de URLs largas en el panel para evitar desbordes.
-- Mejor robustez en la gestión de motivos de alerta.
-- Mejoras visuales y de experiencia de usuario.
+## [1.3.2] - 2024-12-19
+### Mejorado
+- Interfaz del popup optimizada con mejor espaciado y posicionamiento de elementos
+- Botón de ayuda reposicionado para mejor accesibilidad visual
+- Documentación de ayuda actualizada con secciones de dominio nuevo y dominio caducado
+- Eliminación de alertas naranjas (solo se mantienen alertas rojas)
+- Espaciado mejorado en la sección de falta de datos registrales
+
+### Corregido
+- Eliminación de código sobrante y funciones no utilizadas
+- Limpieza de console.logs de debug en producción
+- Eliminación de archivo ayuda.html duplicado en la raíz
+- Función `esCamuflajePeligroso` no utilizada eliminada
+- Console.log de prueba "PRUEBA UNICA" eliminado
+
+### Mantenido
+- Console.logs informativos para usuarios avanzados (detectores de TLD)
+- Funcionalidad completa de la extensión sin cambios en la lógica principal
 
 ## [1.3.0] - YYYY-MM-DD
 ### Añadido

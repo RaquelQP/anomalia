@@ -102,6 +102,5 @@ Ver [CHANGELOG.md](CHANGELOG.md) para un historial completo de cambios.
 
 ### Cambios menores
 - Truncado automático de URLs largas en el panel para evitar desbordes.
-- Limpieza de logs de depuración y advertencias en consola.
 - Mejor robustez en la gestión de motivos de alerta.
 - Mejoras visuales y de experiencia de usuario. 

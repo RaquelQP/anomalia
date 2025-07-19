@@ -127,9 +127,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // --- NUEVO: Aviso de nueva versión disponible ---
 document.addEventListener('DOMContentLoaded', () => {
-  console.log('Popup cargado, comprobando nueva versión...');
   chrome.storage.sync.get(['nuevaVersionDisponible', 'infoNuevaVersion'], ({ nuevaVersionDisponible, infoNuevaVersion }) => {
-    console.log('Valores leídos:', nuevaVersionDisponible, infoNuevaVersion);
     if (nuevaVersionDisponible && infoNuevaVersion && infoNuevaVersion.version && infoNuevaVersion.url) {
       mostrarAvisoNuevaVersion(infoNuevaVersion);
     }
@@ -137,7 +135,6 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function mostrarAvisoNuevaVersion(info) {
-  console.log('Mostrando aviso de nueva versión:', info);
   let aviso = document.getElementById('aviso-nueva-version');
   if (!aviso) {
     aviso = document.createElement('div');

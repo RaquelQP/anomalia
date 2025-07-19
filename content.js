@@ -1,5 +1,3 @@
-console.log('[Anomalia][DEBUG] content.js PRUEBA UNICA 2024-06-20');
-
 let opcionesCargadas = {};
 
 const clavesOpciones = [
@@ -30,15 +28,6 @@ const patronesCamuflaje = [
   /q/,    // q en vez de g
   /u/,    // u en vez de v
 ];
-
-// Función para decidir si el camuflaje tipográfico es peligroso
-function esCamuflajePeligroso(motivos) {
-  // 1. Dominio nuevo
-  if (motivos.dominioNuevo) return true;
-  // 2. Parámetros peligrosos
-  if (motivos.parametros) return true;
-  return false;
-}
 
 function evaluarMotivosDeAlerta(href) {
   const motivos = {
@@ -248,8 +237,6 @@ function aplicarEstilo(link, href, colorElegido, motivos, modoPanel) {
   // ——— Color según lógica ———
   if (modoPanel === 'completo') {
     link.style.outline = `2px solid ${colorElegido || '#ff0000'}`;
-  } else if (modoPanel === 'camuflaje') {
-    link.style.outline = '2px solid #fca652';
   } else if (modoPanel === 'leve') {
     // No outline, solo panel informativo
     link.style.outline = '';
@@ -481,6 +468,10 @@ function procesarEnlaces(forzar = false) {
       enlace.style.outline = '';
       enlace.title = '';
 
+      // Log para usuarios avanzados: datos registrales en consola
+      const dominioRaiz = extraerDominioDesdeHref(href);
+      console.log(`[Anomalia][RDAP] ${href} -> Dominio: ${dominioRaiz}, Registro: ${motivos.fechaRegistro || 'N/A'}, Renovación: ${motivos.fechaRenovacion || 'N/A'}, Expiración: ${motivos.fechaExpiracion || 'N/A'}`);
+
       const tieneMotivosGraves = esMotivoGrave(motivos);
       // Detectar advertencia leve (falta de datos registrales o TLD no soportado)
       const advertenciaLeve = (
@@ -630,6 +621,11 @@ const bodyObserver = new MutationObserver(() => {
           // Quitar estilo provisional
           enlace.style.outline = '';
           enlace.title = '';
+          
+          // Log para usuarios avanzados: datos registrales en consola
+          const dominioRaiz = extraerDominioDesdeHref(href);
+          console.log(`[Anomalia][RDAP] ${href} -> Dominio: ${dominioRaiz}, Registro: ${motivos.fechaRegistro || 'N/A'}, Renovación: ${motivos.fechaRenovacion || 'N/A'}, Expiración: ${motivos.fechaExpiracion || 'N/A'}`);
+          
           const tieneMotivosGraves = esMotivoGrave(motivos);
           // Detectar advertencia leve (falta de datos registrales o TLD no soportado)
           const advertenciaLeve = (
@@ -705,7 +701,7 @@ const servidoresRDAP = {
   'online': 'https://rdap.centralnic.com/online/domain/',
   'site': 'https://rdap.centralnic.com/site/domain/',
   'store': 'https://rdap.centralnic.com/store/domain/',
-  'it': 'https://rdap.nic.it/domain/', // Añadido TLD .it
+  'it': 'https://rdap.nic.it/domain/',
   'cat': 'https://rdap.nic.cat/domain/',
   // Puede añadir más TLDs según necesidad
 };

@@ -3,15 +3,16 @@ body {
   background-color: #f4f4f4;
   color: #333;
   margin: 0;
-  padding: 12px;
+  padding: 24px 12px 12px 12px;
   width: 320px;
+  position: relative;
 }
 
 .header-controls {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 8px;
+  margin-bottom: 0px;
 }
 
 .extension-toggle {
