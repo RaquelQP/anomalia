@@ -218,10 +218,18 @@ Puedes copiar el código Unicode (\uXXXX) en la URL de prueba para ver cómo la 
       <h3>Instrucciones de uso</h3>
       <p><strong>¿Qué hace esta herramienta?</strong></p>
       <ul>
-        <li>Te permite crear enlaces de prueba con caracteres Unicode para probar la extensión Anomalia</li>
+        <li>Te permite crear enlaces de prueba con <strong>homoglifos</strong> y caracteres Unicode para probar la extensión Anomalia</li>
         <li>Convierte códigos Unicode (\uXXXX) en caracteres reales</li>
         <li>Detecta automáticamente qué alfabetos Unicode estás usando</li>
         <li>Genera enlaces 100% seguros para pruebas</li>
+      </ul>
+      
+      <p><strong>¿Qué son los homoglifos?</strong></p>
+      <p>Los <strong>homoglifos</strong> son caracteres que se ven visualmente similares pero son diferentes en Unicode. Por ejemplo:</p>
+      <ul>
+        <li><code>o</code> (latina) vs <code>о</code> (cirílica)</li>
+        <li><code>l</code> (latina) vs <code>ⅼ</code> (griega)</li>
+        <li><code>a</code> (latina) vs <code>а</code> (cirílica)</li>
       </ul>
       
       <p><strong>¿Cómo usarlo?</strong></p>
@@ -251,41 +259,116 @@ Puedes copiar el código Unicode (\uXXXX) en la URL de prueba para ver cómo la 
   <div class="resultado" id="renderedOutput"></div>
   <div class="tipografia" id="diagnosisOutput"></div>
 
-  <div style="margin-top:2em; background:#fff; border:1px solid #ccc; padding:1em; font-size:0.98em;">
-    <b>Ejemplos de códigos Unicode para probar:</b>
-    <table style="margin-top:0.5em; border-collapse:collapse; width:100%;">
+  <div class="examples-box">
+    <h3>Ejemplos de homoglifos y caracteres Unicode</h3>
+    <table>
       <thead>
-        <tr style="background:#f8f8f8;">
-          <th style="border:1px solid #ccc; padding:4px;">Carácter</th>
-          <th style="border:1px solid #ccc; padding:4px;">Descripción</th>
-          <th style="border:1px solid #ccc; padding:4px;">Código Unicode</th>
-          <th style="border:1px solid #ccc; padding:4px;">Ejemplo de uso en URL</th>
+        <tr>
+          <th>Carácter</th>
+          <th>Descripción</th>
+          <th>Código Unicode</th>
+          <th>Ejemplo de uso en URL</th>
         </tr>
       </thead>
       <tbody>
-        <tr><td style="border:1px solid #ccc; padding:4px;">ⅼ</td><td style="border:1px solid #ccc; padding:4px;">“l” griega (letra ele)</td><td style="border:1px solid #ccc; padding:4px;">\u2113</td><td style="border:1px solid #ccc; padding:4px;">https://examp\u2113e.com</td></tr>
-        <tr><td style="border:1px solid #ccc; padding:4px;">о</td><td style="border:1px solid #ccc; padding:4px;">“o” cirílica</td><td style="border:1px solid #ccc; padding:4px;">\u043E</td><td style="border:1px solid #ccc; padding:4px;">https://g\u043Eogle.com</td></tr>
-        <tr><td style="border:1px solid #ccc; padding:4px;">а</td><td style="border:1px solid #ccc; padding:4px;">“a” cirílica</td><td style="border:1px solid #ccc; padding:4px;">\u0430</td><td style="border:1px solid #ccc; padding:4px;">https://p\u0430ypal.com</td></tr>
-        <tr><td style="border:1px solid #ccc; padding:4px;">–</td><td style="border:1px solid #ccc; padding:4px;">Guion largo Unicode</td><td style="border:1px solid #ccc; padding:4px;">\u2013</td><td style="border:1px solid #ccc; padding:4px;">https://micros\u2013ft.com</td></tr>
-        <tr><td style="border:1px solid #ccc; padding:4px;">ı</td><td style="border:1px solid #ccc; padding:4px;">“i” latina sin punto</td><td style="border:1px solid #ccc; padding:4px;">\u0131</td><td style="border:1px solid #ccc; padding:4px;">https://m\u0131crosoft.com</td></tr>
-        <tr><td style="border:1px solid #ccc; padding:4px;">Ι</td><td style="border:1px solid #ccc; padding:4px;">“I” griega mayúscula</td><td style="border:1px solid #ccc; padding:4px;">\u0399</td><td style="border:1px solid #ccc; padding:4px;">https://m\u0399crosoft.com</td></tr>
-        <tr><td style="border:1px solid #ccc; padding:4px;">Ο</td><td style="border:1px solid #ccc; padding:4px;">“O” griega mayúscula</td><td style="border:1px solid #ccc; padding:4px;">\u039F</td><td style="border:1px solid #ccc; padding:4px;">https://micr\u039Fsoft.com</td></tr>
-        <tr><td style="border:1px solid #ccc; padding:4px;">0</td><td style="border:1px solid #ccc; padding:4px;">Cero (no Unicode, pero útil para camuflaje)</td><td style="border:1px solid #ccc; padding:4px;">0</td><td style="border:1px solid #ccc; padding:4px;">https://micros0ft.com</td></tr>
+        <tr><td>ⅼ</td><td>"l" griega (homoglifo)</td><td>\u2113</td><td>https://examp\u2113e.com</td></tr>
+        <tr><td>о</td><td>"o" cirílica (homoglifo)</td><td>\u043E</td><td>https://g\u043Eogle.com</td></tr>
+        <tr><td>а</td><td>"a" cirílica (homoglifo)</td><td>\u0430</td><td>https://p\u0430ypal.com</td></tr>
+        <tr><td>–</td><td>Guion largo Unicode</td><td>\u2013</td><td>https://micros\u2013ft.com</td></tr>
+        <tr><td>ı</td><td>"i" latina sin punto</td><td>\u0131</td><td>https://m\u0131crosoft.com</td></tr>
+        <tr><td>Ι</td><td>"I" griega mayúscula (homoglifo)</td><td>\u0399</td><td>https://m\u0399crosoft.com</td></tr>
+        <tr><td>Ο</td><td>"O" griega mayúscula (homoglifo)</td><td>\u039F</td><td>https://micr\u039Fsoft.com</td></tr>
+        <tr><td>е</td><td>"e" cirílica (homoglifo)</td><td>\u0435</td><td>https://fac\u0435book.com</td></tr>
+        <tr><td>с</td><td>"c" cirílica (homoglifo)</td><td>\u0441</td><td>https://mi\u0441rosoft.com</td></tr>
+        <tr><td>р</td><td>"p" cirílica (homoglifo)</td><td>\u0440</td><td>https://pay\u0440al.com</td></tr>
+        <tr><td>у</td><td>"y" cirílica (homoglifo)</td><td>\u0443</td><td>https://pa\u0443pal.com</td></tr>
+        <tr><td>х</td><td>"x" cirílica (homoglifo)</td><td>\u0445</td><td>https://bo\u0445.com</td></tr>
+        <tr><td>і</td><td>"i" cirílica (homoglifo)</td><td>\u0456</td><td>https://m\u0456crosoft.com</td></tr>
+        <tr><td>ј</td><td>"j" cirílica (homoglifo)</td><td>\u0458</td><td>https://ja\u0458a.com</td></tr>
+        <tr><td>ѕ</td><td>"s" cirílica (homoglifo)</td><td>\u0455</td><td>https://s\u0455earch.com</td></tr>
+        <tr><td>α</td><td>Alfa griega</td><td>\u03B1</td><td>https://alph\u03B1.com</td></tr>
+        <tr><td>β</td><td>Beta griega</td><td>\u03B2</td><td>https://bet\u03B2.com</td></tr>
+        <tr><td>γ</td><td>Gamma griega</td><td>\u03B3</td><td>https://g\u03B3mma.com</td></tr>
+        <tr><td>δ</td><td>Delta griega</td><td>\u03B4</td><td>https://delt\u03B4.com</td></tr>
+        <tr><td>ε</td><td>Épsilon griega</td><td>\u03B5</td><td>https://eps\u03B5lon.com</td></tr>
+        <tr><td>ζ</td><td>Zeta griega</td><td>\u03B6</td><td>https://zet\u03B6.com</td></tr>
+        <tr><td>η</td><td>Eta griega</td><td>\u03B7</td><td>https://et\u03B7.com</td></tr>
+        <tr><td>θ</td><td>Theta griega</td><td>\u03B8</td><td>https://thet\u03B8.com</td></tr>
+        <tr><td>ι</td><td>Iota griega</td><td>\u03B9</td><td>https://iot\u03B9.com</td></tr>
+        <tr><td>κ</td><td>Kappa griega</td><td>\u03BA</td><td>https://kapp\u03BA.com</td></tr>
+        <tr><td>λ</td><td>Lambda griega</td><td>\u03BB</td><td>https://l\u03BBmbda.com</td></tr>
+        <tr><td>μ</td><td>Mu griega</td><td>\u03BC</td><td>https://m\u03BC.com</td></tr>
+        <tr><td>ν</td><td>Nu griega</td><td>\u03BD</td><td>https://n\u03BD.com</td></tr>
+        <tr><td>ξ</td><td>Xi griega</td><td>\u03BE</td><td>https://x\u03BE.com</td></tr>
+        <tr><td>ο</td><td>Ómicron griega</td><td>\u03BF</td><td>https://omicr\u03BFn.com</td></tr>
+        <tr><td>π</td><td>Pi griega</td><td>\u03C0</td><td>https://p\u03C0.com</td></tr>
+        <tr><td>ρ</td><td>Rho griega</td><td>\u03C1</td><td>https://rh\u03C1.com</td></tr>
+        <tr><td>σ</td><td>Sigma griega</td><td>\u03C3</td><td>https://sigm\u03C3.com</td></tr>
+        <tr><td>τ</td><td>Tau griega</td><td>\u03C4</td><td>https://t\u03C4u.com</td></tr>
+        <tr><td>υ</td><td>Ípsilon griega</td><td>\u03C5</td><td>https://ups\u03C5lon.com</td></tr>
+        <tr><td>φ</td><td>Fi griega</td><td>\u03C6</td><td>https://ph\u03C6.com</td></tr>
+        <tr><td>χ</td><td>Ji griega</td><td>\u03C7</td><td>https://ch\u03C7.com</td></tr>
+        <tr><td>ψ</td><td>Psi griega</td><td>\u03C8</td><td>https://ps\u03C8.com</td></tr>
+        <tr><td>ω</td><td>Omega griega</td><td>\u03C9</td><td>https://omeg\u03C9.com</td></tr>
+        <tr><td>ա</td><td>"w" armenia (homoglifo)</td><td>\u0561</td><td>https://ww\u0561.com</td></tr>
+        <tr><td>բ</td><td>"b" armenia (homoglifo)</td><td>\u0562</td><td>https://boo\u0562.com</td></tr>
+        <tr><td>գ</td><td>"g" armenia (homoglifo)</td><td>\u0563</td><td>https://goo\u0563le.com</td></tr>
+        <tr><td>դ</td><td>"d" armenia (homoglifo)</td><td>\u0564</td><td>https://goo\u0564le.com</td></tr>
+        <tr><td>ե</td><td>"e" armenia (homoglifo)</td><td>\u0565</td><td>https://fac\u0565book.com</td></tr>
+        <tr><td>զ</td><td>"z" armenia (homoglifo)</td><td>\u0566</td><td>https://ama\u0566on.com</td></tr>
+        <tr><td>է</td><td>"e" armenia (homoglifo)</td><td>\u0567</td><td>https://fac\u0567book.com</td></tr>
+        <tr><td>ը</td><td>"y" armenia (homoglifo)</td><td>\u0568</td><td>https://pa\u0568pal.com</td></tr>
+        <tr><td>թ</td><td>"t" armenia (homoglifo)</td><td>\u0569</td><td>https://twi\u0569ter.com</td></tr>
+        <tr><td>ժ</td><td>"j" armenia (homoglifo)</td><td>\u056A</td><td>https://ja\u056Aa.com</td></tr>
+        <tr><td>ի</td><td>"i" armenia (homoglifo)</td><td>\u056B</td><td>https://m\u056Bcrosoft.com</td></tr>
+        <tr><td>լ</td><td>"l" armenia (homoglifo)</td><td>\u056C</td><td>https://goog\u056Ce.com</td></tr>
+        <tr><td>խ</td><td>"x" armenia (homoglifo)</td><td>\u056D</td><td>https://bo\u056D.com</td></tr>
+        <tr><td>ծ</td><td>"c" armenia (homoglifo)</td><td>\u056E</td><td>https://mi\u056Erosoft.com</td></tr>
+        <tr><td>կ</td><td>"k" armenia (homoglifo)</td><td>\u056F</td><td>https://lin\u056F.com</td></tr>
+        <tr><td>հ</td><td>"h" armenia (homoglifo)</td><td>\u0570</td><td>https://\u0570otmail.com</td></tr>
+        <tr><td>ձ</td><td>"j" armenia (homoglifo)</td><td>\u0571</td><td>https://ja\u0571a.com</td></tr>
+        <tr><td>ղ</td><td>"g" armenia (homoglifo)</td><td>\u0572</td><td>https://goo\u0572le.com</td></tr>
+        <tr><td>ճ</td><td>"c" armenia (homoglifo)</td><td>\u0573</td><td>https://mi\u0573rosoft.com</td></tr>
+        <tr><td>մ</td><td>"m" armenia (homoglifo)</td><td>\u0574</td><td>https://a\u0574azon.com</td></tr>
+        <tr><td>յ</td><td>"y" armenia (homoglifo)</td><td>\u0575</td><td>https://pa\u0575pal.com</td></tr>
+        <tr><td>ն</td><td>"n" armenia (homoglifo)</td><td>\u0576</td><td>https://ama\u0576on.com</td></tr>
+        <tr><td>շ</td><td>"s" armenia (homoglifo)</td><td>\u0577</td><td>https://\u0577earch.com</td></tr>
+        <tr><td>ո</td><td>"o" armenia (homoglifo)</td><td>\u0578</td><td>https://g\u0578ogle.com</td></tr>
+        <tr><td>չ</td><td>"c" armenia (homoglifo)</td><td>\u0579</td><td>https://mi\u0579rosoft.com</td></tr>
+        <tr><td>պ</td><td>"p" armenia (homoglifo)</td><td>\u057A</td><td>https://\u057Aaypal.com</td></tr>
+        <tr><td>ջ</td><td>"j" armenia (homoglifo)</td><td>\u057B</td><td>https://ja\u057Ba.com</td></tr>
+        <tr><td>ռ</td><td>"r" armenia (homoglifo)</td><td>\u057C</td><td>https://twi\u057Cter.com</td></tr>
+        <tr><td>ս</td><td>"s" armenia (homoglifo)</td><td>\u057D</td><td>https://\u057Dearch.com</td></tr>
+        <tr><td>վ</td><td>"v" armenia (homoglifo)</td><td>\u057E</td><td>https://\u057Eimeo.com</td></tr>
+        <tr><td>տ</td><td>"t" armenia (homoglifo)</td><td>\u057F</td><td>https://twi\u057Fter.com</td></tr>
+        <tr><td>ր</td><td>"r" armenia (homoglifo)</td><td>\u0580</td><td>https://twi\u0580ter.com</td></tr>
+        <tr><td>ց</td><td>"c" armenia (homoglifo)</td><td>\u0581</td><td>https://mi\u0581rosoft.com</td></tr>
+        <tr><td>ւ</td><td>"w" armenia (homoglifo)</td><td>\u0582</td><td>https://ww\u0582.com</td></tr>
+        <tr><td>փ</td><td>"p" armenia (homoglifo)</td><td>\u0583</td><td>https://\u0583aypal.com</td></tr>
+        <tr><td>ք</td><td>"q" armenia (homoglifo)</td><td>\u0584</td><td>https://\u0584uora.com</td></tr>
+        <tr><td>օ</td><td>"o" armenia (homoglifo)</td><td>\u0585</td><td>https://g\u0585ogle.com</td></tr>
+        <tr><td>ֆ</td><td>"f" armenia (homoglifo)</td><td>\u0586</td><td>https://\u0586acebook.com</td></tr>
       </tbody>
     </table>
-    <div style="margin-top:0.5em; color:#555; font-size:0.97em;">Puedes copiar el código Unicode (\uXXXX) en la URL de prueba para ver cómo la extensión lo detecta.</div>
+    <div style="margin-top:1em; color:#666; font-size:0.95em;">Puedes copiar el código Unicode (\uXXXX) en la URL de prueba para ver cómo la extensión detecta los homoglifos.</div>
   </div>
 
-  <div style="margin-top:2em; background:#fff3cd; border-left:4px solid #ffc107; padding:1em;">
-    <h3>Ejemplos prácticos para probar</h3>
-    <p><strong>Prueba estos enlaces en Gmail o Outlook con Anomalia activada:</strong></p>
-    <ul>
-      <li><strong>Camuflaje tipográfico:</strong> <code>https://micros0ft.example.com</code> (cero en vez de "o")</li>
-      <li><strong>Carácter griego:</strong> <code>https://g\u043Eogle.example.com</code> ("o" cirílica)</li>
-      <li><strong>Letra griega:</strong> <code>https://examp\u2113e.example.com</code> ("l" griega)</li>
-      <li><strong>Guion Unicode:</strong> <code>https://micros\u2013ft.example.com</code> (guion largo)</li>
-      <li><strong>Carácter sin punto:</strong> <code>https://m\u0131crosoft.example.com</code> ("i" sin punto)</li>
-    </ul>
+    <div class="warning-box">
+      <h3>Ejemplos prácticos para probar</h3>
+      <p><strong>Prueba estos enlaces en Gmail o Outlook con Anomalia activada:</strong></p>
+      <ul>
+        <li><strong>Homoglifo cirílico:</strong> <code>https://g\u043Eogle.example.com</code> ("o" cirílica)</li>
+        <li><strong>Homoglifo griego:</strong> <code>https://examp\u2113e.example.com</code> ("l" griega)</li>
+        <li><strong>Guion Unicode:</strong> <code>https://micros\u2013ft.example.com</code> (guion largo)</li>
+        <li><strong>Carácter sin punto:</strong> <code>https://m\u0131crosoft.example.com</code> ("i" sin punto)</li>
+        <li><strong>Múltiples homoglifos:</strong> <code>https://fac\u0435b\u043E\u0430k.example.com</code> (varios caracteres cirílicos)</li>
+        <li><strong>Mezcla de alfabetos:</strong> <code>https://m\u0399cr\u043Es\u043Fft.example.com</code> (griego y cirílico)</li>
+        <li><strong>Caracteres griegos:</strong> <code>https://alph\u03B1bet\u03B2.example.com</code> (alfa y beta griegas)</li>
+        <li><strong>Símbolos matemáticos:</strong> <code>https://p\u03C0r\u03C1\u03C3.example.com</code> (pi, rho, sigma)</li>
+        <li><strong>Homoglifos armenios:</strong> <code>https://goo\u0563le.example.com</code> ("g" armenia)</li>
+        <li><strong>Mezcla armenia:</strong> <code>https://fac\u0565boo\u0562.example.com</code> ("e" y "b" armenias)</li>
+        <li><strong>Caracteres cirílicos adicionales:</strong> <code>https://m\u0456crosoft.example.com</code> ("i" cirílica)</li>
+      </ul>
     
     <p><strong>¿Qué deberías ver?</strong></p>
     <ul>
