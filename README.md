@@ -1,7 +1,7 @@
 # Anomalia — Detector de Enlaces Sospechosos
 
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
-[![Version](https://img.shields.io/badge/version-1.2.0-green.svg)](https://github.com/RaquelQP/anomalia/releases)
+[![Version](https://img.shields.io/badge/version-1.3.3-green.svg)](https://github.com/RaquelQP/anomalia/releases)
 [![Chrome Version](https://img.shields.io/badge/Chrome-88+-green?logo=google-chrome)](https://www.google.com/chrome/)
 
 Una extensión de Chrome que protege su seguridad en Gmail y Outlook detectando enlaces potencialmente maliciosos en tiempo real.
@@ -98,9 +98,12 @@ Ver [CHANGELOG.md](CHANGELOG.md) para un historial completo de cambios.
 
 ## Versión
 
-**1.3.1** (21 de junio de 2024)
+**1.3.3** (19 de julio de 2025)
 
-### Cambios menores
-- Truncado automático de URLs largas en el panel para evitar desbordes.
-- Mejor robustez en la gestión de motivos de alerta.
-- Mejoras visuales y de experiencia de usuario. 
+### Mejoras recientes
+- **Detección de caracteres Unicode mejorada:** Añadido rango de símbolos de letras (0x2100-0x214F)
+- **Cobertura completa:** Ahora detecta todos los caracteres del generador, incluyendo ⅼ (script small l)
+- **Prevención de phishing:** Mejorada la detección de homoglifos y caracteres confusos
+- **Interfaz optimizada:** Mejor espaciado y posicionamiento de elementos en el popup
+- **Limpieza de código:** Eliminación de funciones no utilizadas y console.logs de debug
+- **Documentación actualizada:** Secciones de dominio nuevo y dominio caducado en la ayuda 

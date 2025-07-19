@@ -91,7 +91,7 @@ y este proyecto adhiere a [Semantic Versioning](https://semver.org/spec/v2.0.0.h
 - Mejor gestión de advertencias RDAP solo en desarrollo.
 - Mejoras menores de compatibilidad y experiencia de usuario.
 
-## [1.3.4] - 2024-12-19
+## [1.3.4] - 2025-07-19
 
 ### Mejorado
 - **Generador de enlaces:** Añadidos todos los caracteres confusos de alfabetos armenio, cirílico y griego
@@ -109,7 +109,7 @@ y este proyecto adhiere a [Semantic Versioning](https://semver.org/spec/v2.0.0.h
 - **Nuevos bloques Unicode:** "Símbolos matemáticos" y "Símbolos técnicos"
 - **Compatibilidad:** Mantenida con todos los rangos Unicode existentes
 
-## [1.3.3] - 2024-12-19
+## [1.3.3] - 2025-07-19
 
 ### Mejorado
 - **Detección de caracteres Unicode:** Añadido rango de símbolos de letras (0x2100-0x214F)
@@ -120,7 +120,7 @@ y este proyecto adhiere a [Semantic Versioning](https://semver.org/spec/v2.0.0.h
 - **Nuevo bloque Unicode:** "Símbolos de letras" para detectar caracteres como ⅼ, ℓ, ℎ, etc.
 - **Compatibilidad:** Mantenida con todos los rangos Unicode existentes
 
-## [1.3.2] - 2024-12-19
+## [1.3.2] - 2025-07-19
 ### Mejorado
 - Interfaz del popup optimizada con mejor espaciado y posicionamiento de elementos
 - Botón de ayuda reposicionado para mejor accesibilidad visual
