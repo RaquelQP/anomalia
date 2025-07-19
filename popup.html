@@ -7,25 +7,31 @@
 </head>
 <body>
   <div id="aviso-nueva-version"></div>
+  
+  <div style="height: 20px;"></div>
+  
+  <div class="extension-toggle" style="position: absolute; top: 8px; right: 12px;">
+    <img id="extension-icon" src="icons/extension-standby.png" alt="Estado de extensión" />
+  </div>
+  
   <div class="header-controls">
     <div class="checkbox-container">
       <input type="checkbox" id="toggle-darkmode" />
       <label for="toggle-darkmode">Modo oscuro</label>
     </div>
-    <div class="extension-toggle">
-      <img id="extension-icon" src="icons/extension-standby.png" alt="Estado de extensión" />
-    </div>
   </div>
+
+  <div style="height: 12px;"></div>
 
   <!-- Icono de ayuda en la esquina superior derecha -->
   <a href="documentacion/ayuda.html" target="_blank" title="Ayuda">
-    <img src="icons/help.png" alt="Ayuda" style="width:18px;height:18px;vertical-align:middle;float:right;cursor:pointer;">
+    <img src="icons/help.png" alt="Ayuda" style="width:18px;height:18px;vertical-align:middle;float:right;cursor:pointer;margin-top:4px;margin-right:8px;">
   </a>
 
   <div class="container">
-    <div class="opcion">
-      <label for="mostrarDominioSimple">Mostrar siempre el dominio</label>
+    <div class="checkbox-container">
       <input type="checkbox" id="mostrarDominioSimple" />
+      <label for="mostrarDominioSimple">Mostrar siempre el dominio</label>
     </div>
 
     <div class="opcion">
