@@ -20,34 +20,73 @@ Puedes copiar el código Unicode (\uXXXX) en la URL de prueba para ver cómo la 
   <meta charset="UTF-8" />
   <title>Generador de Enlaces con Unicode</title>
   <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+    }
+    
     body {
       font-family: Consolas, monospace;
       background: #f4f4f4;
       padding: 2em;
+      min-height: 100vh;
+      box-sizing: border-box;
     }
+    
     input, textarea {
       width: 100%;
       font-family: Consolas, monospace;
       margin-top: 1em;
       padding: 0.5em;
+      box-sizing: border-box;
     }
+    
     .resultado {
       margin-top: 2em;
       background: #fff;
       border: 1px solid #ccc;
       padding: 1em;
       white-space: pre-wrap;
+      word-wrap: break-word;
     }
+    
     .tipografia {
       margin-top: 1em;
       font-size: 0.95em;
       background: #fff;
       border-left: 4px solid #555;
       padding: 0.8em;
+      word-wrap: break-word;
     }
+    
     .alerta {
       color: crimson;
       font-weight: bold;
+    }
+    
+    /* Asegurar que las tablas sean responsivas */
+    table {
+      max-width: 100%;
+      overflow-x: auto;
+      display: block;
+    }
+    
+    /* Mejorar el scroll en dispositivos móviles */
+    @media (max-width: 768px) {
+      body {
+        padding: 1em;
+      }
+      
+      table {
+        font-size: 0.9em;
+      }
+      
+      th, td {
+        padding: 2px !important;
+        font-size: 0.85em;
+      }
     }
   </style>
 </head>
