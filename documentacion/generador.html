@@ -53,6 +53,33 @@ Puedes copiar el código Unicode (\uXXXX) en la URL de prueba para ver cómo la 
 </head>
 <body>
   <h2>🧪 Generador de Enlaces con Unicode (solo para pruebas)</h2>
+  
+  <div style="background:#e8f4fd; border-left:4px solid #2196F3; padding:1em; margin-bottom:1em;">
+    <h3>📖 Instrucciones de uso</h3>
+    <p><strong>¿Qué hace esta herramienta?</strong></p>
+    <ul>
+      <li>Te permite crear enlaces de prueba con caracteres Unicode para probar la extensión Anomalia</li>
+      <li>Convierte códigos Unicode (\uXXXX) en caracteres reales</li>
+      <li>Detecta automáticamente qué alfabetos Unicode estás usando</li>
+      <li>Genera enlaces 100% seguros para pruebas</li>
+    </ul>
+    
+    <p><strong>¿Cómo usarlo?</strong></p>
+    <ol>
+      <li>Escribe una URL en el campo de texto usando códigos Unicode (ej: <code>https://examp\u2113e.com</code>)</li>
+      <li>La herramienta convertirá automáticamente los códigos Unicode en caracteres</li>
+      <li>Verás el enlace resultante y qué alfabetos Unicode se detectaron</li>
+      <li>Puedes hacer clic en el enlace para probarlo en Gmail/Outlook con Anomalia activada</li>
+    </ol>
+    
+    <p><strong>¿Por qué es seguro?</strong></p>
+    <ul>
+      <li>Solo permite dominios reservados para pruebas: <code>example.com</code>, <code>test.com</code>, <code>example.org</code>, <code>example.net</code></li>
+      <li>Estos dominios no pueden ser registrados por usuarios reales</li>
+      <li>Perfecto para probar la detección de la extensión sin riesgos</li>
+    </ul>
+  </div>
+  
   <div class="alerta" style="margin-bottom:1em;">
     ⚠️ Esta herramienta es solo para fines educativos y de prueba con la extensión Anomalia.<br>
     Solo puedes generar enlaces con dominios reservados como <b>example.com</b>, <b>test.com</b>, <b>example.org</b> o <b>example.net</b>.<br>
@@ -87,6 +114,26 @@ Puedes copiar el código Unicode (\uXXXX) en la URL de prueba para ver cómo la 
       </tbody>
     </table>
     <div style="margin-top:0.5em; color:#555; font-size:0.97em;">Puedes copiar el código Unicode (\uXXXX) en la URL de prueba para ver cómo la extensión lo detecta.</div>
+  </div>
+
+  <div style="margin-top:2em; background:#fff3cd; border-left:4px solid #ffc107; padding:1em;">
+    <h3>🎯 Ejemplos prácticos para probar</h3>
+    <p><strong>Prueba estos enlaces en Gmail o Outlook con Anomalia activada:</strong></p>
+    <ul>
+      <li><strong>Camuflaje tipográfico:</strong> <code>https://micros0ft.example.com</code> (cero en vez de "o")</li>
+      <li><strong>Carácter griego:</strong> <code>https://g\u043Eogle.example.com</code> ("o" cirílica)</li>
+      <li><strong>Letra griega:</strong> <code>https://examp\u2113e.example.com</code> ("l" griega)</li>
+      <li><strong>Guion Unicode:</strong> <code>https://micros\u2013ft.example.com</code> (guion largo)</li>
+      <li><strong>Carácter sin punto:</strong> <code>https://m\u0131crosoft.example.com</code> ("i" sin punto)</li>
+    </ul>
+    
+    <p><strong>¿Qué deberías ver?</strong></p>
+    <ul>
+      <li>Enlaces marcados en rojo por Anomalia</li>
+      <li>Panel informativo al pasar el ratón</li>
+      <li>Mensajes explicando qué tipo de caracteres se detectaron</li>
+      <li>Datos registrales del dominio (si están disponibles)</li>
+    </ul>
   </div>
 
   <script>
