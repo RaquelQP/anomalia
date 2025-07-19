@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Anomalia — Detector de Enlaces Sospechosos",
   "description": "Protege tu seguridad en Gmail y Outlook detectando enlaces maliciosos, acortadores, IPs, caracteres Unicode sospechosos y camuflaje tipográfico. Análisis completo de URLs en tiempo real con alertas visuales para prevenir phishing.",
-  "version": "1.3.2",
+  "version": "1.3.3",
 
   "permissions": [
     "storage",

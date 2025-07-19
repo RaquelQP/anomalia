@@ -91,6 +91,35 @@ y este proyecto adhiere a [Semantic Versioning](https://semver.org/spec/v2.0.0.h
 - Mejor gestión de advertencias RDAP solo en desarrollo.
 - Mejoras menores de compatibilidad y experiencia de usuario.
 
+## [1.3.4] - 2024-12-19
+
+### Mejorado
+- **Generador de enlaces:** Añadidos todos los caracteres confusos de alfabetos armenio, cirílico y griego
+- **Detección de caracteres Unicode:** Añadidos rangos de símbolos matemáticos y técnicos
+- **Cobertura completa:** Ahora incluye 50+ caracteres homoglifos de diferentes alfabetos
+- **Prevención de phishing:** Máxima cobertura de caracteres confusos para ataques de homoglifos
+
+### Añadido
+- **Caracteres armenios:** 38 caracteres homoglifos del alfabeto armenio
+- **Caracteres cirílicos adicionales:** і, ј, ѕ (i, j, s confusos)
+- **Rangos Unicode adicionales:** Símbolos matemáticos (0x2200-0x22FF) y técnicos (0x2300-0x23FF)
+- **Ejemplos prácticos:** Casos de uso con múltiples alfabetos mezclados
+
+### Técnico
+- **Nuevos bloques Unicode:** "Símbolos matemáticos" y "Símbolos técnicos"
+- **Compatibilidad:** Mantenida con todos los rangos Unicode existentes
+
+## [1.3.3] - 2024-12-19
+
+### Mejorado
+- **Detección de caracteres Unicode:** Añadido rango de símbolos de letras (0x2100-0x214F)
+- **Cobertura completa:** Ahora detecta todos los caracteres del generador, incluyendo ⅼ (script small l)
+- **Prevención de phishing:** Mejorada la detección de homoglifos y caracteres confusos
+
+### Técnico
+- **Nuevo bloque Unicode:** "Símbolos de letras" para detectar caracteres como ⅼ, ℓ, ℎ, etc.
+- **Compatibilidad:** Mantenida con todos los rangos Unicode existentes
+
 ## [1.3.2] - 2024-12-19
 ### Mejorado
 - Interfaz del popup optimizada con mejor espaciado y posicionamiento de elementos

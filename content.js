@@ -65,7 +65,10 @@ function evaluarMotivosDeAlerta(href) {
       'Latín extendido A': [0x0100, 0x017F],
       'Latín extendido B': [0x0180, 0x024F],
       'Matemáticos alfanuméricos': [0x1D400, 0x1D7FF],
-      'Diacríticos combinados': [0x0300, 0x036F]
+      'Diacríticos combinados': [0x0300, 0x036F],
+      'Símbolos de letras': [0x2100, 0x214F],
+      'Símbolos matemáticos': [0x2200, 0x22FF],
+      'Símbolos técnicos': [0x2300, 0x23FF]
     };
     for (const char of href) {
       const code = char.codePointAt(0);
