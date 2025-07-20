@@ -1,20 +1,26 @@
 # Anomalia — Detector de Enlaces Sospechosos
 
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
-[![Version](https://img.shields.io/badge/version-1.3.3-green.svg)](https://github.com/RaquelQP/anomalia/releases)
+[![Version](https://img.shields.io/badge/version-1.3.4-green.svg)](https://github.com/RaquelQP/anomalia/releases)
 [![Chrome Version](https://img.shields.io/badge/Chrome-88+-green?logo=google-chrome)](https://www.google.com/chrome/)
 
 Una extensión de Chrome que protege su seguridad en Gmail y Outlook detectando enlaces potencialmente maliciosos en tiempo real.
 
 ## 🛡️ Características
 
-- **Detección de acortadores**: Identifica servicios como bit.ly, t.co, goo.gl, etc.
+- **Detección de acortadores**: Identifica más de 45 servicios públicos, maliciosos y semi-controlados como bit.ly, tinyurl.com, adf.ly, etc.
 - **Análisis de IPs**: Detecta enlaces que apuntan directamente a direcciones IP
-- **Caracteres Unicode sospechosos**: Identifica alfabetos cirílicos, griegos, armenios y otros que pueden camuflarse
+- **Caracteres Unicode sospechosos**: Identifica alfabetos cirílicos, griegos, armenios y símbolos de letras que pueden camuflarse
+- **Detección de punycode**: Identifica dominios que usan codificación punycode (xn--) para camuflar caracteres
+- **Subdominios excesivos**: Detecta dominios con más de 3 subdominios (técnica de evasión común)
+- **URLs excesivamente largas**: Detecta URLs con más de 200 caracteres (posible evasión)
+- **TLDs de alto riesgo**: Detecta dominios con TLDs gratuitos o muy baratos (.tk, .ml, .xyz, .top, .click, etc.)
+- **Conexiones no seguras**: Detecta enlaces HTTP (sin HTTPS) que pueden ser inseguros
+- **Puertos no estándar**: Detecta enlaces con puertos sospechosos (8080, 8443, etc.)
 - **Camuflaje tipográfico**: Detección automática de caracteres similares (0/O, 1/l, etc.)
 - **Credenciales en URLs**: Alerta sobre URLs que contienen usuario/contraseña
-- **Parámetros de redirección**: Detecta parámetros sospechosos como 'redirect', 'url', 'next'
-- **Homoglifos**: Identifica caracteres invisibles y de control
+- **Parámetros de redirección**: Detecta múltiples parámetros sospechosos como 'redirect', 'url', 'next', 'goto', 'link', 'href', etc.
+- **Homoglifos expandidos**: Identifica más de 60 caracteres invisibles, de control y marcas direccionales
 - **Análisis de datos registrales (RDAP)**: Consulta y analiza registro, renovación y expiración de dominios para los TLDs más populares (.com, .net, .org, .es, .io, .ai, .co, .it, etc.)
 - **Panel informativo con emojis**: Mensajes claros y diferenciados por nivel de riesgo con 🚫 (peligro) y ⚠️ (precaución)
 - **Advertencia leve**: Si no se pueden obtener datos registrales o el TLD no está soportado
@@ -76,15 +82,15 @@ Para desarrollo local:
 
 ## Licencia
 
-Este proyecto está licenciado bajo la Licencia Pública General GNU v3.0 (GPL v3). Consulte el archivo LICENSE para más detalles.
+Este proyecto está licenciado bajo la Licencia Pública General GNU v3.0 (GPL v3). Consulte el archivo [docs/LICENSE](docs/LICENSE) para más detalles.
 
 ## 🤝 Contribuciones
 
-Las contribuciones son bienvenidas. Por favor, consulte nuestra [Guía de Contribución](CONTRIBUTING.md) antes de enviar un pull request.
+Las contribuciones son bienvenidas. Por favor, consulte nuestra [Guía de Contribución](docs/CONTRIBUTING.md) antes de enviar un pull request.
 
 ## 🔒 Seguridad
 
-Para reportar vulnerabilidades de seguridad, consulte nuestra [Política de Seguridad](SECURITY.md).
+Para reportar vulnerabilidades de seguridad, consulte nuestra [Política de Seguridad](docs/SECURITY.md).
 
 ## 📞 Soporte
 
@@ -94,16 +100,24 @@ Para reportar vulnerabilidades de seguridad, consulte nuestra [Política de Segu
 
 ## 📋 Changelog
 
-Ver [CHANGELOG.md](CHANGELOG.md) para un historial completo de cambios. 
+Ver [CHANGELOG.md](docs/CHANGELOG.md) para un historial completo de cambios. 
 
 ## Versión
 
-**1.3.3** (19 de julio de 2025)
+**1.3.4** (20 de julio de 2025)
 
 ### Mejoras recientes
-- **Detección de caracteres Unicode mejorada:** Añadido rango de símbolos de letras (0x2100-0x214F)
-- **Cobertura completa:** Ahora detecta todos los caracteres del generador, incluyendo ⅼ (script small l)
-- **Prevención de phishing:** Mejorada la detección de homoglifos y caracteres confusos
-- **Interfaz optimizada:** Mejor espaciado y posicionamiento de elementos en el popup
-- **Limpieza de código:** Eliminación de funciones no utilizadas y console.logs de debug
-- **Documentación actualizada:** Secciones de dominio nuevo y dominio caducado en la ayuda 
+- **Detección de punycode:** Nueva funcionalidad para detectar dominios que usan codificación punycode (xn--)
+- **Subdominios excesivos:** Detección de dominios con más de 3 subdominios (técnica de evasión)
+- **URLs excesivamente largas:** Detección de URLs con más de 200 caracteres (posible evasión)
+- **TLDs de alto riesgo:** Detección de dominios con TLDs gratuitos o muy baratos
+- **Conexiones no seguras:** Detección de enlaces HTTP (sin HTTPS)
+- **Puertos no estándar:** Detección de enlaces con puertos sospechosos
+- **Parámetros de redirección expandidos:** Detección de múltiples parámetros sospechosos de redirección
+- **Prevención de phishing:** Cobertura adicional contra ataques de homoglifos usando punycode
+- **Organización de documentación:** Reorganización completa en carpeta `docs/` para mejor mantenimiento
+- **Detección de acortadores expandida:** Más de 45 servicios categorizados por riesgo (públicos, maliciosos, semi-controlados)
+- **Homoglifos mejorados:** Detección de más de 60 caracteres invisibles, de control y marcas direccionales
+- **Caracteres Unicode expandidos:** Incluye símbolos de letras y múltiples rangos Unicode
+- **Estructura mejorada:** Seguimiento de convenciones estándar de proyectos open source
+- **Referencias actualizadas:** Todos los enlaces internos funcionando correctamente 

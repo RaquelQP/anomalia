@@ -1,5 +1,6 @@
 let opcionesCargadas = {};
 
+// ===== CONFIGURACIÓN DE OPCIONES =====
 const clavesOpciones = [
   'color',
   'extensionActiva',
@@ -8,7 +9,8 @@ const clavesOpciones = [
   'mostrarDominioSimple'
 ];
 
-// Patrones ampliados de camuflaje tipográfico
+// ===== PATRONES DE DETECCIÓN =====
+// Patrones de camuflaje tipográfico
 const patronesCamuflaje = [
   /0/,    // Cero en vez de o
   /1/,    // Uno en vez de l o i
@@ -29,6 +31,191 @@ const patronesCamuflaje = [
   /u/,    // u en vez de v
 ];
 
+// Bloques Unicode para detección de alfabetos
+const bloquesUnicode = {
+  'Cirílico': [0x0400, 0x04FF],
+  'Suplemento cirílico': [0x0500, 0x052F],
+  'Griego': [0x0370, 0x03FF],
+  'Armenio': [0x0530, 0x058F],
+  'Hebreo': [0x0590, 0x05FF],
+  'Latín extendido A': [0x0100, 0x017F],
+  'Latín extendido B': [0x0180, 0x024F],
+  'Matemáticos alfanuméricos': [0x1D400, 0x1D7FF],
+  'Diacríticos combinados': [0x0300, 0x036F],
+  'Símbolos de letras': [0x2100, 0x214F],
+  'Símbolos matemáticos': [0x2200, 0x22FF],
+  'Símbolos técnicos': [0x2300, 0x23FF]
+};
+
+// Lista de acortadores de URL
+const acortadores = [
+  // Acortadores públicos (muy peligrosos - cualquiera puede crear enlaces)
+  'bit.ly', 't.co', 'goo.gl', 'tinyurl.com',
+  'ow.ly', 'is.gd', 'buff.ly', 'shorturl.at',
+  'rebrand.ly', 'lnkd.in', 's.id', 'cut.ly',
+  'tiny.cc', 'bit.do', 'cutt.ly', 't2m.io',
+  'short.io', 'bl.ink', 'cli.re', 'lnnk.in',
+  // Acortadores maliciosos conocidos
+  'adf.ly', 'sh.st', 'adfly.com', 'shorte.st',
+  'bc.vc', 'bcvc.live', 'bcvc.com',
+  'coinurl.com', 'cur.lv', 'dlvr.it',
+  'go2cloud.org', 'ht.ly', 'ift.tt', 'j.mp',
+  'kutt.it', 'migre.me', 'moourl.com', 'myurl.in',
+  'post.ly', 'rww.to', 'scrnch.me', 'snip.ly',
+  'snipurl.com', 'soo.gd', 'su.pr', 'tny.im',
+  'tr.im', 'trib.al', 'tweez.me', 'twitthis.com',
+  'u.mavrev.com', 'u.nu', 'ubr.to', 'ur1.ca',
+  'url.ie', 'url4.eu', 'v.gd', 'vzturl.com',
+  'w.wiki', 'waa.ai', 'x.co', 'xrl.us',
+  'zite.to', 'zpr.io',
+  // Acortadores semi-controlados (riesgo medio)
+  'fb.me', 'lnkd.in'
+];
+
+// Lista de TLDs peligrosos
+const tldsPeligrosos = [
+  // Gratuitos (máximo riesgo)
+  'tk', 'ml', 'ga', 'cf', 'gq',
+  // Muy baratos (alto riesgo)
+  'xyz', 'top', 'click'
+];
+
+// Lista de puertos sospechosos
+const puertosSospechosos = [
+  8080, 8443, 3128, 8000, 8001, 8008, 8081, 8088, 8089,
+  8090, 8091, 8092, 8093, 8094, 8095, 8096, 8097, 8098, 8099,
+  9000, 9001, 9002, 9003, 9004, 9005, 9006, 9007, 9008, 9009
+];
+
+// Parámetros sospechosos para detección
+const parametrosSospechosos = [
+  // Redirección básica
+  'redirect', 'url', 'next', 'continue', 'target',
+  // Redirección avanzada (bajo riesgo de falsos positivos)
+  'goto', 'link', 'href', 'destination', 'to',
+  'return', 'returnto', 'return_to', 'returnurl',
+  'back', 'backto', 'back_to',
+  'forward', 'forwardto',
+  'jump', 'jumpto', 'jump_to'
+];
+
+// Lista de homoglifos y caracteres invisibles
+const homoglifos = [
+  // Caracteres originales
+  0x2010, 0x3164, 0x202E, 0x200B, 0x2066, 0x2067, 0x2068, 0x2069,
+  0x00AD, 0x200E, 0x200F, 0xFEFF, 0x034F,
+  // Espacios invisibles y de control (muy usados en phishing)
+  0x2000, 0x2001, 0x2002, 0x2003, 0x2004, 0x2005, 0x2006, 0x2007, 0x2008, 0x2009, 0x200A, // Espacios de diferentes anchos
+  0x200C, 0x200D, // Conectores de ancho cero
+  0x00A0, // NO-BREAK SPACE (espacio sin salto)
+  0x3000, // IDEOGRAPHIC SPACE (espacio ideográfico)
+  0x205F, // MEDIUM MATHEMATICAL SPACE (espacio matemático medio)
+  0x202F, // NARROW NO-BREAK SPACE (espacio estrecho sin salto)
+  // Marcas direccionales (para cambiar el orden de lectura)
+  0x202A, 0x202B, 0x202C, 0x202D, // Marcas direccionales
+  0x206A, 0x206B, 0x206C, 0x206D, 0x206E, 0x206F, // Marcas de formato
+  // Separadores de línea y párrafo
+  0x2028, 0x2029, // Separadores de línea
+  // Caracteres de formato adicionales
+  0x2060, 0x2061, 0x2062, 0x2063, 0x2064, // Caracteres de formato
+  // Caracteres braille en blanco (pueden ser invisibles)
+  0x2800, // BRAILLE PATTERN BLANK (patrón braille en blanco)
+  // Caracteres de control adicionales
+  0x2027, // HYPHENATION POINT (punto de guionización)
+  0x2026, // HORIZONTAL ELLIPSIS (elipsis horizontal)
+  0x2025, // TWO DOT LEADER (líder de dos puntos)
+  0x2024, // ONE DOT LEADER (líder de un punto)
+  0x2023, // TRIANGULAR BULLET (viñeta triangular)
+  0x2022, // BULLET (viñeta)
+  0x2021, // DOUBLE DAGGER (daga doble)
+  0x2020, // DAGGER (daga)
+  // Caracteres de puntuación que pueden confundir
+  0x201F, 0x201E, 0x201D, 0x201C, 0x201B, 0x201A, 0x2019, 0x2018, // Comillas
+  0x2017, 0x2016, 0x2015, 0x2014, 0x2013, 0x2012, 0x2011, // Líneas y guiones
+  // Caracteres de control de formato bidireccional
+  0x2065, // NEXT LINE (siguiente línea)
+  0x2066, // LEFT-TO-RIGHT ISOLATE (aislado de izquierda a derecha)
+  0x2067, // RIGHT-TO-LEFT ISOLATE (aislado de derecha a izquierda)
+  0x2068, // FIRST STRONG ISOLATE (primer aislado fuerte)
+  0x2069, // POP DIRECTIONAL ISOLATE (pop de aislado direccional)
+  0x206A, // INHIBIT SYMMETRIC SWAPPING (inhibir intercambio simétrico)
+  0x206B, // ACTIVATE SYMMETRIC SWAPPING (activar intercambio simétrico)
+  0x206C, // INHIBIT ARABIC FORM SHAPING (inhibir modelado de forma árabe)
+  0x206D, // ACTIVATE ARABIC FORM SHAPING (activar modelado de forma árabe)
+  0x206E, // NATIONAL DIGIT SHAPES (formas de dígitos nacionales)
+  0x206F, // NOMINAL DIGIT SHAPES (formas de dígitos nominales)
+  // Caracteres de control adicionales para phishing
+  0x2060, // WORD JOINER (conector de palabra)
+  0x2061, // FUNCTION APPLICATION (aplicación de función)
+  0x2062, // INVISIBLE TIMES (multiplicación invisible)
+  0x2063, // INVISIBLE SEPARATOR (separador invisible)
+  0x2064, // INVISIBLE PLUS (más invisible)
+  // Caracteres de control de formato
+  0x202E, // RIGHT-TO-LEFT OVERRIDE (sobrescritura de derecha a izquierda)
+  0x202D, // LEFT-TO-RIGHT OVERRIDE (sobrescritura de izquierda a derecha)
+  0x202C, // POP DIRECTIONAL FORMATTING (pop de formato direccional)
+  0x202B, // RIGHT-TO-LEFT EMBEDDING (incrustación de derecha a izquierda)
+  0x202A, // LEFT-TO-RIGHT EMBEDDING (incrustación de izquierda a derecha)
+  0x200F, // RIGHT-TO-LEFT MARK (marca de derecha a izquierda)
+  0x200E, // LEFT-TO-RIGHT MARK (marca de izquierda a derecha)
+  0x200B, // ZERO WIDTH SPACE (espacio de ancho cero)
+  0x200C, // ZERO WIDTH NON-JOINER (no-conector de ancho cero)
+  0x200D, // ZERO WIDTH JOINER (conector de ancho cero)
+  0xFEFF, // ZERO WIDTH NO-BREAK SPACE (espacio de ancho cero sin salto)
+  0x3164, // HANGUL FILLER (carácter de relleno coreano)
+  0x034F, // COMBINING GRAPHEME JOINER (combinador de grafemas)
+  0x00AD  // SOFT HYPHEN (guión suave)
+];
+
+// ===== CONFIGURACIÓN RDAP =====
+// TLDs soportados con sus servidores RDAP
+const servidoresRDAP = {
+  'com': 'https://rdap.verisign.com/com/v1/domain/',
+  'net': 'https://rdap.verisign.com/net/v1/domain/',
+  'org': 'https://rdap.pir.org/rdap/domain/',
+  'es': 'https://rdap.nic.es/rdap/domain/',
+  'io': 'https://rdap.nic.io/rdap/domain/',
+  'ai': 'https://rdap.nic.ai/rdap/domain/',
+  'co': 'https://rdap.nic.co/rdap/domain/',
+  'it': 'https://rdap.nic.it/rdap/domain/',
+  'ms': 'https://rdap.nic.ms/rdap/domain/'
+};
+
+// ===== CONFIGURACIÓN DE INTERFAZ =====
+// Posiciones disponibles para el panel
+const posicionesPanel = {
+  'top-left': { top: '10px', left: '10px' },
+  'top-right': { top: '10px', right: '10px' },
+  'bottom-left': { bottom: '10px', left: '10px' },
+  'bottom-right': { bottom: '10px', right: '10px' }
+};
+
+// Colores disponibles para el marcado
+const coloresDisponibles = {
+  'rojo': '#ff0000',
+  'azul': '#0066cc'
+};
+
+// ===== CONFIGURACIÓN DE CACHE =====
+// Tiempo de vida del cache RDAP (en milisegundos)
+const CACHE_DURACION = 24 * 60 * 60 * 1000; // 24 horas
+
+// ===== SELECTORES DOM =====
+// Selectores para detectar zonas de mensajes
+const SELECTORES_ZONA = {
+  gmail: 'div[role="main"]',
+  outlook: 'div[data-test-id="message-pane"]'
+};
+
+// ===== CONFIGURACIÓN DE OBSERVADORES =====
+// Configuración para MutationObserver
+const CONFIG_OBSERVADOR = {
+  childList: true,
+  subtree: true
+};
+
+// ===== FUNCIONES =====
+
 function evaluarMotivosDeAlerta(href) {
   const motivos = {
     alfabetos: [],
@@ -40,6 +227,12 @@ function evaluarMotivosDeAlerta(href) {
     parametros: false,            // Compatibilidad: true si cualquiera de los dos
     homoglifos: false,
     camuflajeTipografico: false, // Nuevo motivo grave
+    punycode: false,              // Nuevo: detección de punycode
+    subdominiosExcesivos: false,  // Nuevo: detección de subdominios excesivos
+    urlExcesivamenteLarga: false, // Nuevo: detección de URLs excesivamente largas
+    tldPeligroso: false,           // Nuevo: detección de TLDs peligrosos
+    sinHttps: false,               // Nuevo: detección de conexiones no seguras
+    puertoSospechoso: false,       // Nuevo: detección de puertos sospechosos
     dominioNuevo: false,
     fechaRegistro: null,
     fechaRenovacion: null,
@@ -56,23 +249,9 @@ function evaluarMotivosDeAlerta(href) {
   if (url) {
     const host = url.hostname;
     // ——— 1. ALFABETOS UNICODE ———
-    const bloques = {
-      'Cirílico': [0x0400, 0x04FF],
-      'Suplemento cirílico': [0x0500, 0x052F],
-      'Griego': [0x0370, 0x03FF],
-      'Armenio': [0x0530, 0x058F],
-      'Hebreo': [0x0590, 0x05FF],
-      'Latín extendido A': [0x0100, 0x017F],
-      'Latín extendido B': [0x0180, 0x024F],
-      'Matemáticos alfanuméricos': [0x1D400, 0x1D7FF],
-      'Diacríticos combinados': [0x0300, 0x036F],
-      'Símbolos de letras': [0x2100, 0x214F],
-      'Símbolos matemáticos': [0x2200, 0x22FF],
-      'Símbolos técnicos': [0x2300, 0x23FF]
-    };
     for (const char of href) {
       const code = char.codePointAt(0);
-      for (const [nombre, [inicio, fin]] of Object.entries(bloques)) {
+      for (const [nombre, [inicio, fin]] of Object.entries(bloquesUnicode)) {
         if (code >= inicio && code <= fin) {
           motivos.alfabetos.push({ bloque: nombre, caracter: char });
           break;
@@ -80,29 +259,17 @@ function evaluarMotivosDeAlerta(href) {
       }
     }
     // ——— 2. ACORTADOR ———
-    const acortadores = [
-      'bit.ly', 't.co', 'goo.gl', 'tinyurl.com',
-      'ow.ly', 'is.gd', 'buff.ly', 'shorturl.at',
-      'rebrand.ly', 'lnkd.in', 's.id', 'cut.ly',
-      'tiny.cc', 'bit.do', 'cutt.ly', 't2m.io',
-      'short.io', 'bl.ink', 'cli.re', 'lnnk.in'
-    ];
     motivos.acortador = acortadores.includes(host);
     // ——— 3. IP ———
     motivos.ip = /^(?:\d{1,3}\.){3}\d{1,3}$/.test(host);
     // ——— 4. CREDENCIALES ———
     motivos.credenciales = !!(url.username || url.password);
     // ——— 5. PARÁMETROS SOSPECHOSOS ———
-    const sospechosos = ['redirect', 'url', 'next', 'continue', 'target'];
     const params = [...url.searchParams.keys()].map(k => k.toLowerCase());
-    motivos.parametrosSospechosos = params.some(k => sospechosos.includes(k));
-    motivos.rutaSospechosa = sospechosos.some(sos => url.pathname.toLowerCase().includes(sos));
+    motivos.parametrosSospechosos = params.some(k => parametrosSospechosos.includes(k));
+    motivos.rutaSospechosa = parametrosSospechosos.some(sos => url.pathname.toLowerCase().includes(sos));
     motivos.parametros = motivos.parametrosSospechosos || motivos.rutaSospechosa; // Para compatibilidad
     // ——— 6. HOMOGLIFOS ———
-    const homoglifos = [
-      0x2010, 0x3164, 0x202E, 0x200B, 0x2066, 0x2067, 0x2068, 0x2069,
-      0x00AD, 0x200E, 0x200F, 0xFEFF, 0x034F
-    ];
     for (const char of href) {
       if (homoglifos.includes(char.codePointAt(0))) {
         motivos.homoglifos = true;
@@ -111,6 +278,21 @@ function evaluarMotivosDeAlerta(href) {
     }
     // ——— 7. CAMUFLAJE TIPOGRÁFICO (solo se decide tras RDAP) ———
     motivos._hayCamuflaje = patronesCamuflaje.some(p => p.test(host));
+    // ——— 8. PUNYCODE ———
+    motivos.punycode = host.includes('xn--');
+    // ——— 9. SUBDOMINIOS EXCESIVOS ———
+    const subdominios = host.split('.').length - 2; // -2 para excluir dominio y TLD
+    motivos.subdominiosExcesivos = subdominios > 3; // Más de 3 subdominios
+    // ——— 10. URL EXCESIVAMENTE LARGA ———
+    motivos.urlExcesivamenteLarga = href.length > 200; // Más de 200 caracteres
+    // ——— 11. TLD PELIGROSO ———
+    const tld = host.split('.').pop().toLowerCase();
+    motivos.tldPeligroso = tldsPeligrosos.includes(tld);
+    // ——— 12. FALTA DE HTTPS ———
+    motivos.sinHttps = !href.startsWith('https://');
+    // ——— 13. PUERTO SOSPECHOSO ———
+    const puerto = url.port;
+    motivos.puertoSospechoso = puerto && puerto !== '80' && puerto !== '443' && puertosSospechosos.includes(parseInt(puerto));
   }
   return motivos;
 }
@@ -127,6 +309,18 @@ function generarMensajesExplicativos(motivos) {
     mensajes.push('🚫 Incluye usuario o contraseña en la dirección');
   if (motivos.homoglifos)
     mensajes.push('🚫 Contiene letras invisibles o similares');
+  if (motivos.punycode)
+    mensajes.push('🚫 El dominio usa codificación punycode (posible camuflaje)');
+  if (motivos.subdominiosExcesivos)
+    mensajes.push('⚠️ El dominio tiene demasiados subdominios (posible evasión)');
+  if (motivos.urlExcesivamenteLarga)
+    mensajes.push('⚠️ La URL es excesivamente larga (posible evasión)');
+  if (motivos.tldPeligroso)
+    mensajes.push('⚠️ El dominio usa un TLD de alto riesgo');
+  if (motivos.sinHttps)
+    mensajes.push('⚠️ La conexión no es segura (HTTP en lugar de HTTPS)');
+  if (motivos.puertoSospechoso)
+    mensajes.push('⚠️ El enlace usa un puerto no estándar (posible evasión)');
   // ⚠️ Precaución
   if (motivos.acortador)
     mensajes.push('⚠️ El destino real está oculto tras un acortador');
@@ -203,6 +397,8 @@ function esMotivoGrave(motivos) {
     motivos.parametrosSospechosos ||
     motivos.rutaSospechosa ||
     motivos.homoglifos ||
+    motivos.punycode ||
+    motivos.subdominiosExcesivos ||
     motivos.dominioNuevo ||
     motivos._dominioCaducadoReal
   );
@@ -264,7 +460,7 @@ function aplicarEstilo(link, href, colorElegido, motivos, modoPanel) {
 }
 
 function mostrarPanelLateral(link, contenidoHtml, modoPanel = 'completo') {
-  chrome.storage.sync.get(['extensionActiva', 'modoOscuro', 'posicionPanel'], ({ extensionActiva, modoOscuro, posicionPanel }) => {
+  chrome.storage.sync.get(clavesOpciones, ({ extensionActiva, modoOscuro, posicionPanel }) => {
     if (extensionActiva === false) return;
 
     // Determinar qué tipo de panel usar
@@ -315,6 +511,10 @@ function mostrarPanelLateral(link, contenidoHtml, modoPanel = 'completo') {
 const cacheRDAP = {};
 // NUEVO: Cache de promesas para evitar consultas duplicadas por dominio raíz
 const cacheRDAPPromesas = {};
+// Contador de dominios únicos consultados
+let dominiosConsultados = new Set();
+// Set para dominios ya logueados (evitar logs duplicados)
+let dominiosLogueados = new Set();
 
 // En analizarEnlaceConRDAP_cacheado, decide si camuflajeTipografico es motivo grave
 async function analizarEnlaceConRDAP_cacheado(href) {
@@ -332,6 +532,7 @@ async function analizarEnlaceConRDAP_cacheado(href) {
     const dominioRaiz = extraerDominioDesdeHref(href);
     // --- NUEVO: Cache de promesas por dominio raíz ---
     if (!cacheRDAPPromesas[dominioRaiz]) {
+      dominiosConsultados.add(dominioRaiz);
       cacheRDAPPromesas[dominioRaiz] = (async () => {
         const servidorRDAP = await obtenerServidorRDAP(dominioRaiz);
         if (!servidorRDAP) {
@@ -413,6 +614,8 @@ async function analizarEnlaceConRDAP_cacheado(href) {
           };
         }
       })();
+    } else {
+      // console.log(`[Anomalia][CACHE] ✅ Usando cache existente para dominio: ${dominioRaiz}`); // Eliminado
     }
     // Esperar la promesa y fusionar motivos RDAP con motivosURL
     const motivosRDAP = await cacheRDAPPromesas[dominioRaiz];
@@ -435,10 +638,20 @@ async function analizarEnlaceConRDAP_cacheado(href) {
 }
 
 let procesandoEnlaces = false;
+let ultimoProcesamiento = 0;
 
 function procesarEnlaces(forzar = false) {
-  if (procesandoEnlaces) return;
+  if (procesandoEnlaces) {
+    // console.log(`[Anomalia][CACHE] ⏸️ Ya se están procesando enlaces, saltando...`); // Eliminado
+    return;
+  }
   procesandoEnlaces = true;
+  // console.log(`[Anomalia][CACHE] 🚀 Iniciando procesamiento de enlaces (forzar: ${forzar})`); // Eliminado
+  
+  // Limpiar logs de dominios solo si es forzado o primera vez
+  if (forzar || dominiosLogueados.size === 0) {
+    dominiosLogueados.clear();
+  }
 
   if (opcionesCargadas?.extensionActiva === false) {
     procesandoEnlaces = false;
@@ -458,8 +671,8 @@ function procesarEnlaces(forzar = false) {
     const href = enlace.getAttribute('href');
     const mostrarDominio = opcionesCargadas?.mostrarDominioSimple === true;
 
-    // Evitar reprocesar enlaces ya analizados
-    if (enlace.getAttribute('data-anomalia-procesado') === 'true') return;
+    // Evitar reprocesar enlaces ya analizados (solo si no se fuerza)
+    if (!forzar && enlace.getAttribute('data-anomalia-procesado') === 'true') return;
     enlace.setAttribute('data-anomalia-procesado', 'true');
 
     // Estilo provisional mientras se analiza
@@ -471,9 +684,12 @@ function procesarEnlaces(forzar = false) {
       enlace.style.outline = '';
       enlace.title = '';
 
-      // Log para usuarios avanzados: datos registrales en consola
+      // Log para usuarios avanzados: datos registrales en consola (solo una vez por dominio)
       const dominioRaiz = extraerDominioDesdeHref(href);
-      console.log(`[Anomalia][RDAP] ${href} -> Dominio: ${dominioRaiz}, Registro: ${motivos.fechaRegistro || 'N/A'}, Renovación: ${motivos.fechaRenovacion || 'N/A'}, Expiración: ${motivos.fechaExpiracion || 'N/A'}`);
+      if (!dominiosLogueados.has(dominioRaiz)) {
+        dominiosLogueados.add(dominioRaiz);
+        console.log(`[Anomalia][USUARIO] 📋 Dominio: ${dominioRaiz} | Registro: ${motivos.fechaRegistro || 'N/A'} | Renovación: ${motivos.fechaRenovacion || 'N/A'} | Expiración: ${motivos.fechaExpiracion || 'N/A'}`);
+      }
 
       const tieneMotivosGraves = esMotivoGrave(motivos);
       // Detectar advertencia leve (falta de datos registrales o TLD no soportado)
@@ -502,14 +718,21 @@ function procesarEnlaces(forzar = false) {
   });
 
   procesandoEnlaces = false;
+  // console.log(`[Anomalia][CACHE] ✅ Procesamiento de enlaces completado`); // Eliminado
+  
+  // Mostrar resumen de consultas RDAP
+  if (dominiosConsultados.size > 0) {
+    // console.log(`[Anomalia][RESUMEN] 📊 Consultas RDAP únicas: ${dominiosConsultados.size} dominios`); // Eliminado
+    // console.log(`[Anomalia][RESUMEN] 📋 Dominios consultados: ${Array.from(dominiosConsultados).join(', ')}`); // Eliminado
+  }
 }
 
 function obtenerZonaMensajes() {
   // Gmail: contenedor de correos
-  const gmailZona = document.querySelector('div[role="main"]');
+  const gmailZona = document.querySelector(SELECTORES_ZONA.gmail);
 
   // Outlook: zona de mensajes
-  const outlookZona = document.querySelector('div[data-test-id="message-pane"]');
+  const outlookZona = document.querySelector(SELECTORES_ZONA.outlook);
 
   // Devuelve el contenedor válido o null si no hay coincidencia
   return gmailZona || outlookZona || null;
@@ -594,6 +817,15 @@ const bodyObserver = new MutationObserver(() => {
       )
     );
     if (!relevante) return; // Si solo son paneles, no reproceses
+    
+    // Evitar procesamientos muy frecuentes (mínimo 1 segundo entre procesamientos)
+    const ahora = Date.now();
+    if (ahora - ultimoProcesamiento < 1000) {
+      // console.log(`[Anomalia][CACHE] ⏱️ Evitando procesamiento frecuente (último: ${Math.round((ahora - ultimoProcesamiento)/1000)}s)`); // Eliminado
+      return;
+    }
+    ultimoProcesamiento = ahora;
+    // console.log(`[Anomalia][CACHE] 🔄 Iniciando procesamiento de enlaces (pasaron ${Math.round((ahora - ultimoProcesamiento)/1000)}s)`); // Eliminado
 
     mensajeObserver.disconnect();
     chrome.storage.sync.get(clavesOpciones, opciones => {
@@ -601,6 +833,11 @@ const bodyObserver = new MutationObserver(() => {
 
       if (opciones.extensionActiva === false) {
         return;
+      }
+      
+      // Limpiar logs de dominios solo si es primera vez
+      if (dominiosLogueados.size === 0) {
+        dominiosLogueados.clear();
       }
 
       // Procesar todos los enlaces y esperar a que terminen
@@ -625,9 +862,12 @@ const bodyObserver = new MutationObserver(() => {
           enlace.style.outline = '';
           enlace.title = '';
           
-          // Log para usuarios avanzados: datos registrales en consola
+          // Log para usuarios avanzados: datos registrales en consola (solo una vez por dominio)
           const dominioRaiz = extraerDominioDesdeHref(href);
-          console.log(`[Anomalia][RDAP] ${href} -> Dominio: ${dominioRaiz}, Registro: ${motivos.fechaRegistro || 'N/A'}, Renovación: ${motivos.fechaRenovacion || 'N/A'}, Expiración: ${motivos.fechaExpiracion || 'N/A'}`);
+          if (!dominiosLogueados.has(dominioRaiz)) {
+            dominiosLogueados.add(dominioRaiz);
+            console.log(`[Anomalia][USUARIO] 📋 Dominio: ${dominioRaiz} | Registro: ${motivos.fechaRegistro || 'N/A'} | Renovación: ${motivos.fechaRenovacion || 'N/A'} | Expiración: ${motivos.fechaExpiracion || 'N/A'}`);
+          }
           
           const tieneMotivosGraves = esMotivoGrave(motivos);
           // Detectar advertencia leve (falta de datos registrales o TLD no soportado)
@@ -652,19 +892,21 @@ const bodyObserver = new MutationObserver(() => {
         }));
       });
       Promise.all(promesas).then(() => {
+        // Mostrar resumen de consultas RDAP
+        if (dominiosConsultados.size > 0) {
+          // console.log(`[Anomalia][RESUMEN] 📊 Consultas RDAP únicas: ${dominiosConsultados.size} dominios`); // Eliminado
+          // console.log(`[Anomalia][RESUMEN] 📋 Dominios consultados: ${Array.from(dominiosConsultados).join(', ')}`); // Eliminado
+        }
         // Volver a observar después de procesar TODO
-        mensajeObserver.observe(zona, { childList: true, subtree: true });
+        mensajeObserver.observe(zona, CONFIG_OBSERVADOR);
       });
     });
   });
 
-  mensajeObserver.observe(zona, { childList: true, subtree: true });
+  mensajeObserver.observe(zona, CONFIG_OBSERVADOR);
 });
 
-bodyObserver.observe(document.body, {
-  childList: true,
-  subtree: true
-});
+bodyObserver.observe(document.body, CONFIG_OBSERVADOR);
 
 chrome.runtime.onMessage.addListener((mensaje, sender, enviarRespuesta) => {
   if (mensaje.tipo === 'actualizarPreferencias') {
@@ -681,33 +923,6 @@ chrome.runtime.onMessage.addListener((mensaje, sender, enviarRespuesta) => {
     });
   }
 });
-
-// Tabla de servidores RDAP oficiales por TLD (ampliada con los más populares)
-const servidoresRDAP = {
-  'com': 'https://rdap.verisign.com/com/v1/domain/',
-  'net': 'https://rdap.verisign.com/net/v1/domain/',
-  'es': 'https://rdap.nic.es/domain/',
-  'org': 'https://rdap.publicinterestregistry.net/rdap/org/domain/',
-  'info': 'https://rdap.afilias.info/rdap/info/domain/',
-  'biz': 'https://rdap.neustar.biz/rdap/domain/',
-  'eu': 'https://rdap.eu/domain/',
-  'io': 'https://rdap.nic.io/domain/',
-  'app': 'https://rdap.nic.google/domain/',
-  'dev': 'https://rdap.nic.google/domain/',
-  'ai': 'https://rdap.nic.ai/domain/',
-  'co': 'https://rdap.centralnic.com/co/domain/',
-  'us': 'https://rdap.neustar.us/rdap/domain/',
-  'uk': 'https://rdap.nominet.uk/domain/',
-  'me': 'https://rdap.nic.me/domain/',
-  'tv': 'https://rdap.nic.tv/rdap/domain/',
-  'xyz': 'https://rdap.centralnic.com/xyz/domain/',
-  'online': 'https://rdap.centralnic.com/online/domain/',
-  'site': 'https://rdap.centralnic.com/site/domain/',
-  'store': 'https://rdap.centralnic.com/store/domain/',
-  'it': 'https://rdap.nic.it/domain/',
-  'cat': 'https://rdap.nic.cat/domain/',
-  // Puede añadir más TLDs según necesidad
-};
 
 // --- NUEVO: Autocompletado dinámico de servidores RDAP con control de concurrencia y caché ---
 const rdapPendingFetches = {};
@@ -766,8 +981,8 @@ async function obtenerServidorRDAP(dominio) {
           // Sugerir línea para desarrollador (solo si no se ha sugerido antes)
           if (!servidoresRDAP._sugeridos) servidoresRDAP._sugeridos = {};
           if (!servidoresRDAP._sugeridos[tld]) {
-            console.log(`[Anomalia][RDAP] Nuevo TLD detectado: añada esta línea a servidoresRDAP para hacerlo permanente:`);
-            console.log(`  '${tld}': '${url}',`);
+            console.log(`[Anomalia][USUARIO] Nuevo TLD detectado: añada esta línea a servidoresRDAP para hacerlo permanente:`);
+            console.log(`[Anomalia][USUARIO]   '${tld}': '${url}',`);
             servidoresRDAP._sugeridos[tld] = true;
           }
           return url;

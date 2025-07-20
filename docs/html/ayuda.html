@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Ayuda — Anomalia</title>
+  <link rel="stylesheet" href="styles/popup.css">
+  <style>
+    body { font-family: Arial, sans-serif; margin: 2em; background: #fff; color: #222; }
+    h1, h2 { color: #1a73e8; }
+    .ejemplo { background: #f3f3f3; border-left: 4px solid #1a73e8; padding: 0.5em 1em; margin: 1em 0; }
+    a { color: #1a73e8; }
+    nav { margin-bottom: 2em; }
+    nav a { margin-right: 1em; }
+    .ayuda-icono { width: 18px; height: 18px; vertical-align: middle; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <h1>¿Cómo funciona Anomalia?</h1>
+  <p>
+    Anomalia le ayuda a identificar enlaces sospechosos en su correo electrónico. <b>No impide la conexión a ningún enlace</b>; únicamente muestra una advertencia final para que tome una decisión informada antes de hacer clic.
+  </p>
+  <div style="background:#f8f8f8;border-left:5px solid #e74c3c;padding:1em;margin-bottom:2em;">
+    <strong>🔴 Alerta roja:</strong> Los enlaces marcados en <span style="color:#e74c3c;font-weight:bold;">rojo</span> son considerados de <b>riesgo</b> y la protección está <b>siempre activa</b>. Estos enlaces presentan características que suelen asociarse a intentos de engaño, fraude o suplantación de identidad.
+  </div>
+  <nav>
+    <a href="#acortadores">Acortadores</a>
+    <a href="#ip">Enlaces a IPs</a>
+    <a href="#unicode">Unicode</a>
+    <a href="#credenciales">Credenciales</a>
+    <a href="#redirect">Redirecciones</a>
+    <a href="#homoglifos">Homoglifos</a>
+    <a href="#punycode">Punycode</a>
+    <a href="#subdominios">Subdominios</a>
+    <a href="#url-larga">URL larga</a>
+    <a href="#tld-peligroso">TLD peligroso</a>
+    <a href="#http">HTTP</a>
+    <a href="#puerto">Puerto</a>
+    <a href="#camuflaje">Camuflaje</a>
+    <a href="#dominio-nuevo">Dominio nuevo</a>
+    <a href="#dominio-caducado">Dominio caducado</a>
+    <a href="#sin-datos">Falta de datos</a>
+  </nav>
+
+  <h2 id="acortadores">🔴 Acortadores de URL</h2>
+  <p>Los acortadores ocultan el destino real del enlace. Anomalia detecta <b>más de 45 servicios</b> categorizados por riesgo:</p>
+  
+  <h3>Acortadores públicos (muy peligrosos)</h3>
+  <p>Servicios donde <b>cualquiera puede crear enlaces</b> sin restricciones:</p>
+  <div class="ejemplo">
+    bit.ly, t.co, goo.gl, tinyurl.com, ow.ly, is.gd, buff.ly, shorturl.at, rebrand.ly, lnkd.in, s.id, cut.ly, tiny.cc, bit.do, cutt.ly, t2m.io, short.io, bl.ink, cli.re, lnnk.in
+  </div>
+  
+  <h3>Acortadores maliciosos conocidos</h3>
+  <p>Servicios con <b>historial de distribución de malware</b>:</p>
+  <div class="ejemplo">
+    adf.ly, sh.st, adfly.com, shorte.st, bc.vc, bcvc.live, bcvc.com, coinurl.com, cur.lv, dlvr.it, go2cloud.org, ht.ly, ift.tt, j.mp, kutt.it, migre.me, moourl.com, myurl.in, post.ly, rww.to, scrnch.me, snip.ly, snipurl.com, soo.gd, su.pr, tny.im, tr.im, trib.al, tweez.me, twitthis.com, u.mavrev.com, u.nu, ubr.to, ur1.ca, url.ie, url4.eu, v.gd, vzturl.com, w.wiki, waa.ai, x.co, xrl.us, zite.to, zpr.io
+  </div>
+  
+  <h3>Acortadores semi-controlados</h3>
+  <p>Servicios con <b>restricciones parciales</b> pero aún de riesgo:</p>
+  <div class="ejemplo">
+    fb.me, lnkd.in
+  </div>
+  
+  <p><b>Recomendación:</b> Si no confía en el remitente, no haga clic. Puede comprobar el destino en <a href="https://www.expandurl.net/" target="_blank">ExpandURL</a> o <a href="https://www.virustotal.com/" target="_blank">VirusTotal</a>.</p>
+
+  <h2 id="ip">🔴 Enlaces a direcciones IP</h2>
+  <p>Un enlace que apunta directamente a una IP puede ser sospechoso.</p>
+  <div class="ejemplo">
+    Ejemplo: <code>http://192.168.1.1/login</code>
+  </div>
+  <p>Compruebe la IP en <a href="https://whois.domaintools.com/" target="_blank">Whois</a> o <a href="https://www.virustotal.com/" target="_blank">VirusTotal</a>.</p>
+
+  <h2 id="unicode">🔴 Caracteres Unicode sospechosos</h2>
+  <p>Anomalia detecta enlaces que usan letras de otros alfabetos para parecer legítimos. Incluye <b>múltiples rangos Unicode</b>:</p>
+  
+  <h3>Alfabetos extranjeros</h3>
+  <p>Letras de alfabetos cirílicos, griegos, armenios y otros que pueden confundirse:</p>
+  <div class="ejemplo">
+    Alfabetos cirílicos, griegos, armenios, hebreos, árabes, tailandeses, georgianos, etíopes, coptos, tibetanos, mongoles, etc.
+  </div>
+  
+  <h3>Símbolos de letras</h3>
+  <p>Caracteres que parecen letras pero son símbolos matemáticos o tipográficos:</p>
+  <div class="ejemplo">
+    Símbolos como ⅼ (script small l), ℓ (mathematical script small l), ℎ (planck constant), etc.
+  </div>
+  
+  <p><b>Ejemplo:</b> <code>paypaⅼ.com</code> (la "l" es un símbolo matemático, no una "l" latina)</p>
+  <p><b>Recomendación:</b> Si ve un enlace raro, desconfíe y revise la dirección cuidadosamente.</p>
+
+  <h2 id="credenciales">🔴 Credenciales en URLs</h2>
+  <p>Si una URL contiene usuario y contraseña, puede ser un intento de engaño.</p>
+  <div class="ejemplo">
+    Ejemplo: <code>http://usuario:contraseña@ejemplo.com</code>
+  </div>
+  <p>No introduzca sus datos en sitios sospechosos.</p>
+
+  <h2 id="redirect">🔴 Redirecciones sospechosas</h2>
+  <p>Algunos enlaces usan parámetros de redirección para enviarte a otro sitio. Anomalia detecta múltiples parámetros sospechosos:</p>
+  <div class="ejemplo">
+    Parámetros básicos: <code>redirect</code>, <code>url</code>, <code>next</code>, <code>continue</code>, <code>target</code><br>
+    Parámetros avanzados: <code>goto</code>, <code>link</code>, <code>href</code>, <code>destination</code>, <code>to</code>, <code>return</code>, <code>back</code>, <code>forward</code>, <code>jump</code>
+  </div>
+  <div class="ejemplo">
+    Ejemplo: <code>https://ejemplo.com?redirect=http://malicioso.com</code><br>
+    Ejemplo: <code>https://ejemplo.com?goto=http://phishing-site.com</code>
+  </div>
+  <p>Puede analizar el enlace en <a href="https://www.virustotal.com/" target="_blank">VirusTotal</a>.</p>
+
+  <h2 id="homoglifos">🔴 Homoglifos y caracteres invisibles</h2>
+  <p>Anomalia detecta <b>más de 60 caracteres</b> que pueden usarse para camuflar enlaces maliciosos:</p>
+  
+  <h3>Espacios invisibles</h3>
+  <p>11 tipos diferentes de espacios Unicode que pueden ocultar contenido:</p>
+  <div class="ejemplo">
+    Espacios de diferentes anchos, espacios sin salto, espacios ideográficos, espacios matemáticos
+  </div>
+  
+  <h3>Marcas direccionales</h3>
+  <p>Caracteres que cambian el orden de lectura del texto:</p>
+  <div class="ejemplo">
+    Marcas de izquierda a derecha, derecha a izquierda, aislados direccionales
+  </div>
+  
+  <h3>Conectores invisibles</h3>
+  <p>Caracteres de ancho cero que pueden unir o separar texto invisiblemente:</p>
+  <div class="ejemplo">
+    ZERO WIDTH JOINER, ZERO WIDTH NON-JOINER, conectores de palabra
+  </div>
+  
+  <h3>Caracteres de control</h3>
+  <p>Separadores de línea, caracteres braille en blanco y marcas de formato:</p>
+  <div class="ejemplo">
+    Separadores de línea, caracteres de formato bidireccional, caracteres de control adicionales
+  </div>
+  
+  <h3>Caracteres de puntuación confusos</h3>
+  <p>Comillas y líneas que pueden confundir en URLs:</p>
+  <div class="ejemplo">
+    Comillas tipográficas, guiones largos, líneas de diferentes tipos
+  </div>
+  
+  <p><b>Ejemplo:</b> <code>micros–ft.com</code> (el guion es un guion largo Unicode, no el guion normal)</p>
+  <p><b>Recomendación:</b> Si tiene dudas, copie el enlace y péguelo en un editor de texto para revisarlo.</p>
+
+  <h2 id="punycode">🔴 Codificación Punycode</h2>
+  <p>Punycode es una técnica que permite usar caracteres Unicode en nombres de dominio. Los atacantes la usan para crear dominios que se ven legítimos pero redirigen a sitios maliciosos.</p>
+  <div class="ejemplo">
+    Ejemplo: <code>xn--paypal-123.com</code> (dominio punycode que puede parecer "paypal.com")
+  </div>
+  <p>Los dominios punycode comienzan con <code>xn--</code> y son especialmente peligrosos porque pueden camuflar caracteres de alfabetos extranjeros que se ven como letras latinas normales.</p>
+  <p><b>Recomendación:</b> Si ve un dominio que comienza con "xn--", tenga especial precaución.</p>
+
+  <h2 id="subdominios">🔴 Subdominios excesivos</h2>
+  <p>Algunos atacantes crean dominios con muchos subdominios para evadir filtros de seguridad o confundir a los usuarios.</p>
+  <div class="ejemplo">
+    Ejemplo: <code>secure.login.verify.account.update.bank.com</code> (5 subdominios, muy sospechoso)
+  </div>
+  <p>Los dominios legítimos raramente tienen más de 3 subdominios. Ejemplos normales:</p>
+  <div class="ejemplo">
+    <code>mail.google.com</code> (1 subdominio)<br>
+    <code>docs.google.com</code> (1 subdominio)<br>
+    <code>support.microsoft.com</code> (1 subdominio)
+  </div>
+  <p><b>Recomendación:</b> Si ve un dominio con más de 3 subdominios, examine cuidadosamente la URL antes de hacer clic.</p>
+
+  <h2 id="url-larga">🔴 URL excesivamente larga</h2>
+  <p>Algunos atacantes usan URLs muy largas para evadir filtros de seguridad o confundir a los usuarios.</p>
+  <div class="ejemplo">
+    Ejemplo: <code>https://legitimate-site.com/very/long/path/with/many/parameters/and/redirects/that/eventually/lead/to/malicious/site</code> (más de 200 caracteres)
+  </div>
+  <p>Las URLs legítimas suelen ser más cortas y claras. Ejemplos normales:</p>
+  <div class="ejemplo">
+    <code>https://google.com/search?q=test</code> (35 caracteres)<br>
+    <code>https://github.com/user/repo</code> (25 caracteres)<br>
+    <code>https://stackoverflow.com/questions/123</code> (40 caracteres)
+  </div>
+  <p><b>Recomendación:</b> Si ve una URL excesivamente larga (más de 200 caracteres), examine cuidadosamente la dirección antes de hacer clic.</p>
+
+  <h2 id="tld-peligroso">🔴 TLD de alto riesgo</h2>
+  <p>Algunos TLDs (extensiones de dominio) son considerados de alto riesgo por ser gratuitos, muy baratos o tener verificación mínima.</p>
+  <div class="ejemplo">
+    TLDs gratuitos: <code>.tk</code>, <code>.ml</code>, <code>.ga</code>, <code>.cf</code>, <code>.gq</code><br>
+    TLDs muy baratos: <code>.xyz</code>, <code>.top</code>, <code>.click</code>
+  </div>
+  <p>Estos TLDs son frecuentemente usados en ataques de phishing y spam porque:</p>
+  <ul>
+    <li>Son gratuitos o muy baratos (menos de $1/año)</li>
+    <li>Tienen verificación mínima de identidad</li>
+    <li>Son populares entre atacantes</li>
+  </ul>
+  <p><b>Recomendación:</b> Si ve un dominio que termina en uno de estos TLDs, tenga especial precaución.</p>
+
+  <h2 id="http">🔴 Conexión no segura (HTTP)</h2>
+  <p>Los enlaces que usan HTTP en lugar de HTTPS no son seguros. Los datos se transmiten en texto plano y pueden ser interceptados.</p>
+  <div class="ejemplo">
+    Ejemplo inseguro: <code>http://ejemplo.com/login</code><br>
+    Ejemplo seguro: <code>https://ejemplo.com/login</code>
+  </div>
+  <p>Los sitios legítimos modernos usan HTTPS por defecto. Los enlaces HTTP pueden ser:</p>
+  <ul>
+    <li>Sitios que no han migrado a HTTPS (cada vez menos comunes)</li>
+    <li>Intentos de phishing que evitan HTTPS para evitar detección</li>
+    <li>Sitios maliciosos que no invierten en certificados SSL</li>
+  </ul>
+  <p><b>Recomendación:</b> Si ve un enlace HTTP, tenga precaución. Los sitios legítimos modernos usan HTTPS.</p>
+
+  <h2 id="puerto">🔴 Puerto no estándar</h2>
+  <p>Algunos enlaces usan puertos no estándar para evadir filtros de seguridad o confundir a los usuarios.</p>
+  <div class="ejemplo">
+    Ejemplo: <code>https://ejemplo.com:8080/login</code> (puerto 8080 en lugar del estándar 443)<br>
+    Ejemplo: <code>https://ejemplo.com:8443/admin</code> (puerto 8443 en lugar del estándar 443)
+  </div>
+  <p>Los puertos estándar son 80 (HTTP) y 443 (HTTPS). Los puertos no estándar pueden indicar:</p>
+  <ul>
+    <li>Servidores de desarrollo o internos (legítimos pero no para usuarios finales)</li>
+    <li>Intentos de evadir filtros de seguridad</li>
+    <li>Servicios proxy o de redirección maliciosos</li>
+  </ul>
+  <p><b>Recomendación:</b> Si ve un enlace con un puerto no estándar, tenga precaución. Los servicios legítimos suelen usar puertos estándar.</p>
+
+  <h2 id="camuflaje">🔴 Camuflaje tipográfico</h2>
+  <p>Algunos enlaces usan caracteres similares para engañar (por ejemplo, "0" y "O", "1" y "l"). La extensión detecta automáticamente estos caracteres ambiguos y los considera de riesgo cuando el dominio es nuevo (menos de un año) o presenta otros motivos de alerta.</p>
+  <div class="ejemplo">
+    Ejemplo: <code>micros0ft.com</code> (con un cero en vez de "o")</div>
+  <p>El camuflaje tipográfico se considera especialmente peligroso cuando se combina con dominios recientes, dominios caducados o parámetros sospechosos. Fíjese bien en los caracteres antes de hacer clic.</p>
+
+  <h2 id="dominio-nuevo">🔴 Dominio nuevo</h2>
+  <p>Los dominios registrados hace menos de un año son considerados de riesgo, ya que los atacantes suelen crear dominios nuevos para evitar detecciones.</p>
+  <div class="ejemplo">
+    Ejemplo: <code>https://nuevo-sitio-sospechoso.com</code> (dominio registrado recientemente)
+  </div>
+  <p>La extensión muestra la fecha de registro del dominio para que pueda evaluar su antigüedad. Los dominios nuevos requieren mayor precaución.</p>
+
+  <h2 id="dominio-caducado">🔴 Dominio caducado</h2>
+  <p>Los dominios que han caducado o no se han renovado pueden ser peligrosos, ya que pueden haber sido comprados por atacantes para usarlos maliciosamente.</p>
+  <div class="ejemplo">
+    Ejemplo: <code>https://dominio-caducado.com</code> (dominio que no se ha renovado)
+  </div>
+  <p>La extensión distingue entre dominios realmente caducados (fecha de expiración pasada) y dominios que no se han renovado en más de un año (estimación). En ambos casos, se recomienda precaución.</p>
+
+  <h2 id="sin-datos">Advertencia por falta de datos registrales</h2>
+  <p>Si ve el mensaje:</p>
+  <div class="ejemplo">
+    Precaución. No se han podido obtener los datos registrales ni evaluar el riesgo asociado. Compruebe que el nombre de dominio sea correcto antes de pulsar.
+  </div>
+  <p>Significa que no se ha podido comprobar la fiabilidad del dominio. Esto puede ocurrir por:</p>
+  <ul>
+    <li>El dominio no existe o está mal escrito</li>
+    <li>El TLD (extensión del dominio) no está soportado por los servidores RDAP</li>
+    <li>Problemas temporales de conectividad con los servidores de registro</li>
+  </ul>
+  <p>Revise el nombre del dominio con especial atención. Puede obtener datos registrales manualmente en <a href="https://whois.domaintools.com/" target="_blank">Whois</a> o <a href="https://www.virustotal.com/" target="_blank">VirusTotal</a>.</p>
+  <p style="font-size:0.95em;color:#555;">
+    <b>¿Es usuario avanzado?</b> Puede consultar los datos registrales y detalles técnicos de cada dominio directamente en la consola de su navegador (F12 &rarr; pestaña <b>Consola</b>). Los logs aparecen con el prefijo <code>[Anomalia][USUARIO]</code> para facilitar su identificación.
+  </p>
+
+  <hr>
+  <p>¿Tiene dudas? Consulte la <a href="https://github.com/RaquelQP/anomalia/wiki" target="_blank">Wiki</a> o abra una <a href="https://github.com/RaquelQP/anomalia/issues" target="_blank">issue</a>.</p>
+  <p style="font-size: 0.95em; color: #555; margin-top: 2em;">
+    <b>Recuerde:</b> Pueden realizarse intentos de phishing a través de otros medios y no se han recogido todos los tipos de caracteres confusos que existen. Por tanto, <b>actúe siempre con precaución</b> antes de pulsar un enlace desde su correo electrónico y mantenga una actitud responsable.
+  </p>
+  <div style="margin-top:2em; font-size:0.98em; background:#f8f8f8; border-left:4px solid #1a73e8; padding:1em;">
+    <b>¿Quiere experimentar?</b> En la <a href="https://github.com/RaquelQP/anomalia/wiki/Enlaces-de-prueba-para-Anomalia" target="_blank">Wiki del proyecto</a> tiene una <b>lista de enlaces de prueba</b> y acceso a la <b>herramienta generadora de enlaces</b> para que pueda comprobar cómo funciona la extensión en diferentes escenarios.
+  </div>
+</body>
+</html> 
