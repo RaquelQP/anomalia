@@ -24,9 +24,13 @@ function establecerIcono(tabId, url, extensionActiva) {
   const enOutlook = url.startsWith('https://outlook.live.com');
   const esCorreoCompatible = enGmail || enOutlook;
 
-  const iconoFinal = esCorreoCompatible
-    ? (extensionActiva === false ? iconos.inactivo : iconos.activo)
-    : iconos.standby;
+  let iconoFinal;
+  
+  if (esCorreoCompatible) {
+    iconoFinal = extensionActiva !== false ? iconos.activo : iconos.inactivo;
+  } else {
+    iconoFinal = iconos.standby;
+  }
 
   chrome.action.setIcon({ tabId, path: iconoFinal });
 }
@@ -49,15 +53,19 @@ chrome.tabs.onActivated.addListener(activeInfo => {
   chrome.tabs.get(activeInfo.tabId, tab => {
     if (tab.url && esPestaniaCompatible(tab.url)) {
       chrome.tabs.sendMessage(tab.id, { tipo: 'actualizarPreferencias' });
-      chrome.tabs.sendMessage(tab.id, { tipo: 'actualizarIcono' });
     }
+    // Siempre actualizar el icono cuando se cambia de pestaña
+    actualizarIconoEnPestaña(tab);
   });
 });
 
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
   if (changeInfo.status === 'complete' && tab.url && esPestaniaCompatible(tab.url)) {
     chrome.tabs.sendMessage(tabId, { tipo: 'actualizarPreferencias' });
-    chrome.tabs.sendMessage(tabId, { tipo: 'actualizarIcono' });
+  }
+  // Siempre actualizar el icono cuando se actualiza la página
+  if (changeInfo.status === 'complete') {
+    actualizarIconoEnPestaña(tab);
   }
 });
 

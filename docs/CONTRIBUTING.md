@@ -50,10 +50,17 @@ anomalia-v1.2/
 ├── popup.js               # Lógica del popup
 ├── styles/                # Archivos CSS
 ├── icons/                 # Iconos de la extensión
+├── docs/                  # Documentación
+│   ├── html/              # Archivos HTML de ayuda
+│   │   ├── ayuda.html     # Ayuda interactiva
+│   │   └── generador.html # Generador de enlaces
+│   ├── CHANGELOG.md       # Historial de cambios
+│   ├── CONTRIBUTING.md    # Esta guía
+│   ├── SECURITY.md        # Política de seguridad
+│   ├── privacy-policy.md  # Política de privacidad
+│   └── LICENSE            # Licencia GPL v3
 ├── README.md              # Documentación principal
-├── LICENSE                # Licencia GPL v3
-├── CONTRIBUTING.md        # Esta guía
-└── privacy-policy.md      # Política de privacidad
+└── .gitignore             # Archivos ignorados por Git
 ```
 
 ### Convenciones de Código

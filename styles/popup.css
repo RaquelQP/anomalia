@@ -19,7 +19,7 @@ body {
   cursor: pointer;
   padding: 6px;
   border-radius: 4px;
-  transition: background-color 0.2s ease;
+  transition: all 0.2s ease;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -35,11 +35,19 @@ body {
   background-color: rgba(0, 0, 0, 0.2);
 }
 
+.extension-toggle.pending {
+  background-color: rgba(255, 193, 7, 0.1);
+}
+
 #extension-icon {
   width: 36px;
   height: 36px;
   object-fit: contain;
   pointer-events: none;
+}
+
+#extension-status {
+  display: none;
 }
 
 .container {
