@@ -80,10 +80,6 @@ Para desarrollo local:
 3. Active "Modo desarrollador"
 4. Haga clic en "Cargar descomprimida" y seleccione la carpeta del proyecto
 
-## Licencia
-
-Este proyecto está licenciado bajo la Licencia Pública General GNU v3.0 (GPL v3). Consulte el archivo [docs/LICENSE](docs/LICENSE) para más detalles.
-
 ## 🤝 Contribuciones
 
 Las contribuciones son bienvenidas. Por favor, consulte nuestra [Guía de Contribución](docs/CONTRIBUTING.md) antes de enviar un pull request.
