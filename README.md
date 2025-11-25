@@ -1,6 +1,5 @@
 # Anomalia — Detector de Enlaces Sospechosos
 
-[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![Version](https://img.shields.io/badge/version-1.3.4-green.svg)](https://github.com/RaquelQP/anomalia/releases)
 [![Chrome Version](https://img.shields.io/badge/Chrome-88+-green?logo=google-chrome)](https://www.google.com/chrome/)
 
